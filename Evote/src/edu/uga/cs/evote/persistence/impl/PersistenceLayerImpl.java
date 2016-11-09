@@ -119,14 +119,14 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	@Override
 	public List<Voter> restoreVoter(Voter modelVoter) throws EVException {
 		// TODO Auto-generated method stub
-		String       selectClubSql = "SELECT voterName, age, zip, userID FROM voter";
+		String       sqlQuery = "SELECT voterName, age, zip, userID FROM voter";
         Statement    stmt = null;
         StringBuffer query = new StringBuffer( 100 );
         StringBuffer condition = new StringBuffer( 100 );
         List<Voter>   voters = new ArrayList<Voter>();
 	
         condition.setLength( 0 );
-         query.append( selectPersonSql );
+         query.append( sqlQuery );
         if( modelVoter != null ) {
             if( modelVoter.getVoterName() >= 0 ) // id is unique, so it is sufficient to get a person
                 query.append( " where voterName = " + modelVoter.getVoterName() );
@@ -247,14 +247,14 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	@Override
 	public List<Ballot> restoreBallot(Ballot modelBallot) throws EVException {
 		// TODO Auto-generated method stub
-		 	String       selectClubSql = "SELECT ballotID, zip, EOName, bName, approved FROM ballot";
+		 	String       sqlQuery = "SELECT ballotID, zip, EOName, bName, approved FROM ballot";
 	        Statement    stmt = null;
 	        StringBuffer query = new StringBuffer( 100 );
 	        StringBuffer condition = new StringBuffer( 100 );
 	        List<Ballot>   ballots = new ArrayList<Ballot>();
 		
 	        condition.setLength( 0 );
-	         query.append( selectPersonSql );
+	         query.append( sqlQuery );
 	        if( modelBallot != null ) {
 	            if( modelBallot.getBallotID() >= 0 ) // id is unique, so it is sufficient to get a person
 	                query.append( " where ballotID = " + modelBallot.getBallotID() );
@@ -384,14 +384,14 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	@Override
 	public List<Candidate> restoreCandidate(Candidate modelCandidate) throws EVException {
 		// TODO Auto-generated method stub
-		String       selectClubSql = "SELECT choiceID, electionName, partyID, title, voteCount, description FROM ballot";
+		String       sqlQuery = "SELECT choiceID, electionName, partyID, title, voteCount, description FROM ballot";
         Statement    stmt = null;
         StringBuffer query = new StringBuffer( 100 );
         StringBuffer condition = new StringBuffer( 100 );
         List<Candidate>   candidates = new ArrayList<Candidate>();
 	
         condition.setLength( 0 );
-         query.append( selectPersonSql );
+         query.append( sqlQuery );
         if( modelCandidate != null ) {
             if( modelCandidate.getChoiceID() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where ballotID = " + modelCandidate.getChoiceID() );
@@ -526,14 +526,14 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	@Override
 	public List<Election> restoreElection(Election modelElection) throws EVException {
 		// TODO Auto-generated method stub
-		String       selectClubSql = "SELECT electionName, itemID, startDate, endDate, isPartisan FROM election";
+		String       sqlQuery = "SELECT electionName, itemID, startDate, endDate, isPartisan FROM election";
         Statement    stmt = null;
         StringBuffer query = new StringBuffer( 100 );
         StringBuffer condition = new StringBuffer( 100 );
         List<Election>   elections = new ArrayList<Election>();
 	
         condition.setLength( 0 );
-         query.append( selectPersonSql );
+         query.append( sqlQuery );
         if( modelElection != null ) {
             if( modelElection.getElectionName() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where id = " + modelElection.getElectionName() );
@@ -665,14 +665,14 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	public List<ElectoralDistrict> restoreElectoralDistrict(ElectoralDistrict modelElectoralDistrict)
 			throws EVException {
 		// TODO Auto-generated method stub
-		String       selectClubSql = "SELECT zip, districtName FROM electoralDistrict";
+		String       sqlQuery = "SELECT zip, districtName FROM electoralDistrict";
         Statement    stmt = null;
         StringBuffer query = new StringBuffer( 100 );
         StringBuffer condition = new StringBuffer( 100 );
         List<ElectoralDistrict>   electionDistricts = new ArrayList<ElectoralDistrict>();
 	
         condition.setLength( 0 );
-         query.append( selectPersonSql );
+         query.append( sqlQuery );
         if( modelElectoralDistrict != null ) {
             if( modelElectoralDistrict.getZip() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where zip = " + modelElectoralDistrict.getZip() );
@@ -788,14 +788,14 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	@Override
 	public List<Issue> restoreIssue(Issue modelIssue) throws EVException {
 		// TODO Auto-generated method stub
-		String       selectClubSql = "SELECT issueID, itemID, questionTitle, description, yesCount, noCount FROM issue";
+		String       sqlQuery = "SELECT issueID, itemID, questionTitle, description, yesCount, noCount FROM issue";
         Statement    stmt = null;
         StringBuffer query = new StringBuffer( 100 );
         StringBuffer condition = new StringBuffer( 100 );
         List<Issue>   issues = new ArrayList<Issue>();
 	
         condition.setLength( 0 );
-         query.append( selectPersonSql );
+         query.append( sqlQuery );
         if( modelIssue != null ) {
             if( modelIssue.getIssueID() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where issueID = " + modelIssue.getIssueID() );
@@ -878,14 +878,14 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	@Override
 	public List<PoliticalParty> restorePoliticalParty(PoliticalParty modelPoliticalParty) throws EVException {
 		// TODO Auto-generated method stub
-		String       selectClubSql = "SELECT partyID, partyName, color FROM politicalParty";
+		String       sqlQuery = "SELECT partyID, partyName, color FROM politicalParty";
         Statement    stmt = null;
         StringBuffer query = new StringBuffer( 100 );
         StringBuffer condition = new StringBuffer( 100 );
         List<PoliticalParty>   politicalParties = new ArrayList<PoliticalParty>();
 	
         condition.setLength( 0 );
-         query.append( selectPersonSql );
+         query.append( sqlQuery );
         if( modelPoliticalParty != null ) {
             if( modelPoliticalParty.getPartyID() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where partyID = " + modelPoliticalParty.getPartyID() );
@@ -959,14 +959,14 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	@Override
 	public List<VoteRecord> restoreVoteRecord(VoteRecord modelVoteRecord) throws EVException {
 		// TODO Auto-generated method stub
-		String       selectClubSql = "SELECT recordID, voterID, ballotID, date FROM voteRecord";
+		String       sqlQuery = "SELECT recordID, voterID, ballotID, date FROM voteRecord";
         Statement    stmt = null;
         StringBuffer query = new StringBuffer( 100 );
         StringBuffer condition = new StringBuffer( 100 );
         List<VoteRecord>   voteRecords = new ArrayList<VoteRecord>();
 	
         condition.setLength( 0 );
-         query.append( selectPersonSql );
+         query.append( sqlQuery );
         if( modelVoteRecord != null ) {
             if( modelVoteRecord.getRecordID() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where recordID = " + modelVoteRecord.getRecordID() );
@@ -1103,14 +1103,14 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	@Override
 	public Ballot restoreBallotIncludesBallotItem(BallotItem ballotItem) throws EVException {
 		// TODO Auto-generated method stub
-		String       selectClubSql = "SELECT ballotID, zip, EOName, bName, approved FROM ballot";
+		String       sqlQuery = "SELECT ballotID, zip, EOName, bName, approved FROM ballot";
         Statement    stmt = null;
         StringBuffer query = new StringBuffer( 100 );
         StringBuffer condition = new StringBuffer( 100 );
     	Ballot nextBallot = null;
 
         condition.setLength( 0 );
-         query.append( selectPersonSql );
+         query.append( sqlQuery );
         if( ballotItem != null ) {
             if( ballotItem.getBallotID() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where  ballotID = " + ballotItem.getBallotID() );
@@ -1162,14 +1162,14 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	@Override
 	public List<BallotItem> restoreBallotIncludesBallotItem(Ballot ballot) throws EVException {
 		// TODO Auto-generated method stub
-		String       selectClubSql = "SELECT itemID, ballotID, voteCount FROM ballot";
+		String       sqlQuery = "SELECT itemID, ballotID, voteCount FROM ballot";
         Statement    stmt = null;
         StringBuffer query = new StringBuffer( 100 );
         StringBuffer condition = new StringBuffer( 100 );
     	List<BallotItem> ballotItems = new ArrayList<BallotItem>();
 
         condition.setLength( 0 );
-         query.append( selectPersonSql );
+         query.append( sqlQuery );
         if( ballot != null ) {
             if( ballot.getBallotID() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where  ballotID = " + ballot.getBallotID() );
@@ -1292,14 +1292,14 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	@Override
 	public Election restoreCandidateIsCandidateInElection(Candidate candidate) throws EVException {
 		// TODO Auto-generated method stub
-		String       selectClubSql = "SELECT electionName, itemID, startDate, endDate, isPartisan FROM election";
+		String       sqlQuery = "SELECT electionName, itemID, startDate, endDate, isPartisan FROM election";
         Statement    stmt = null;
         StringBuffer query = new StringBuffer( 100 );
         StringBuffer condition = new StringBuffer( 100 );
     	Election nextElection = null;
 	
         condition.setLength( 0 );
-         query.append( selectPersonSql );
+         query.append( sqlQuery );
         if( candidate != null ) {
             if( candidate.getElectionName() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where electionName = " + candidate.getElectionName() );
@@ -1346,14 +1346,14 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	@Override
 	public List<Candidate> restoreCandidateIsCandidateInElection(Election election) throws EVException {
 		// TODO Auto-generated method stub
-		String       selectClubSql = "SELECT choiceID, electionName, partyID, title, voteCount, description FROM ballot";
+		String       sqlQuery = "SELECT choiceID, electionName, partyID, title, voteCount, description FROM ballot";
         Statement    stmt = null;
         StringBuffer query = new StringBuffer( 100 );
         StringBuffer condition = new StringBuffer( 100 );
         List<Candidate>   candidates = new ArrayList<Candidate>();
 	
         condition.setLength( 0 );
-         query.append( selectPersonSql );
+         query.append( sqlQuery );
         if( election != null ) {
             if( election.getElectionName() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where electionName = " + election.getElectionName() );
@@ -1487,14 +1487,14 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	public List<Ballot> restoreElectoralDistrictHasBallotBallot(ElectoralDistrict electoralDistrict)
 			throws EVException {
 		// TODO Auto-generated method stub
-		String       selectClubSql = "SELECT ballotID, zip, EOName, bName, approved FROM ballot";
+		String       sqlQuery = "SELECT ballotID, zip, EOName, bName, approved FROM ballot";
         Statement    stmt = null;
         StringBuffer query = new StringBuffer( 100 );
         StringBuffer condition = new StringBuffer( 100 );
         List<Ballot>   ballots = new ArrayList<Ballot>();
 	
         condition.setLength( 0 );
-         query.append( selectPersonSql );
+         query.append( sqlQuery );
         if( electoralDistrict != null ) {
             if( electoralDistrict.getZip() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where zip = " + electoralDistrict.getZip() );
@@ -1585,14 +1585,14 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	@Override
 	public PoliticalParty restoreCandidateIsMemberOfPoliticalParty(Candidate candidate) throws EVException {
 		// TODO Auto-generated method stub
-		String       selectClubSql = "SELECT partyID, partyName, color FROM politicalParty";
+		String       sqlQuery = "SELECT partyID, partyName, color FROM politicalParty";
         Statement    stmt = null;
         StringBuffer query = new StringBuffer( 100 );
         StringBuffer condition = new StringBuffer( 100 );
         PoliticalParty nextPoliticalParty = null;
 	
         condition.setLength( 0 );
-         query.append( selectPersonSql );
+         query.append( sqlQuery );
         if( candidate != null ) {
             if( candidate.getPartyID() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where partyID = " + candidate.getPartyID() );
@@ -1631,14 +1631,14 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	@Override
 	public List<Candidate> restoreCandidateIsMemberOfPoliticalParty(PoliticalParty politicalParty) throws EVException {
 		// TODO Auto-generated method stub
-		String       selectClubSql = "SELECT choiceID, electionName, partyID, title, voteCount, description FROM ballot";
+		String       sqlQuery = "SELECT choiceID, electionName, partyID, title, voteCount, description FROM ballot";
         Statement    stmt = null;
         StringBuffer query = new StringBuffer( 100 );
         StringBuffer condition = new StringBuffer( 100 );
         List<Candidate>   candidates = new ArrayList<Candidate>();
 	
         condition.setLength( 0 );
-         query.append( selectPersonSql );
+         query.append( sqlQuery );
         if( politicalParty != null ) {
             if( politicalParty.getPartyID() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where partyID = " + politicalParty.getPartyID() );
@@ -1777,14 +1777,14 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	@Override
 	public ElectoralDistrict restoreVoterBelongsToElectoralDistrict(Voter voter) throws EVException {
 		// TODO Auto-generated method stub
-		String       selectClubSql = "SELECT zip, districtName FROM electoralDistrict";
+		String       sqlQuery = "SELECT zip, districtName FROM electoralDistrict";
         Statement    stmt = null;
         StringBuffer query = new StringBuffer( 100 );
         StringBuffer condition = new StringBuffer( 100 );
         ElectoralDistrict nextElectoralDistrict = null;
         
         condition.setLength( 0 );
-         query.append( selectPersonSql );
+         query.append( sqlQuery );
         if( voter != null ) {
             if( voter.getZip() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where zip = " + voter.getZip() );
@@ -1820,14 +1820,14 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	@Override
 	public List<Voter> restoreVoterBelongsToElectoralDistrict(ElectoralDistrict electoralDistrict) throws EVException {
 		// TODO Auto-generated method stub
-		String       selectClubSql = "SELECT voterName, age, zip, userID FROM voter";
+		String       sqlQuery = "SELECT voterName, age, zip, userID FROM voter";
         Statement    stmt = null;
         StringBuffer query = new StringBuffer( 100 );
         StringBuffer condition = new StringBuffer( 100 );
         List<Voter>   voters = new ArrayList<Voter>();
 	
         condition.setLength( 0 );
-         query.append( selectPersonSql );
+         query.append( sqlQuery );
         if( electoralDistrict != null ) {
             if( electoralDistrict.getZip() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where zip = " + electoralDistrict.getZip() );
