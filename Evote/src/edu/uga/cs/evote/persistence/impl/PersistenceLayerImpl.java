@@ -1722,9 +1722,57 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	public void storeVoterBelongsToElectoralDistrict(Voter voter, ElectoralDistrict electoralDistrict)
 			throws EVException {
 		// TODO Auto-generated method stub
-		storeVoter(voter);
-		storeElectoralDistrict(electoralDistrict);
+		String               updateCandidateSql = "UPDATE voter "
+				+ "SET zip = ? "
+				+ "WHERE userID = ?";
+		
+		PreparedStatement    stmt = null;
+        int                  inscnt;
+        long                 membershipId;
+        
+        if( voter.isPersistent())
+            throw new EVException( "PersistenceLayer.save: Attempting to update a voter that isn't persistent" );
+
+        if( electoralDistrict.isPersistent())
+            throw new EVException( "PersistenceLayer.save: Attempting to update a voter that isn't persistent" );
+
+        
+        try {
+            stmt = (PreparedStatement) conn.prepareStatement( updateCandidateSql );
+            
+            stmt.setString( 1, electoralDistrict.getZip() );
+            stmt.setString( 2, voter.getUserID() );
+            
+            inscnt = stmt.executeUpdate();
+            
+            if( inscnt >= 1 ) {
+                String sql = "select last_insert_id()";
+                if( stmt.execute( sql ) ) { // statement returned a result
+
+                    // retrieve the result
+                    ResultSet r = stmt.getResultSet();
+
+                    // we will use only the first row!
+                    //
+                    while( r.next() ) {
+
+                        // retrieve the last insert auto_increment value
+                        membershipId = r.getLong( 1 );
+                        if( membershipId > 0 )
+                        	voteRecord.setId( membershipId ); // set this membership's db id (proxy object)
+                    }
+                }
+            }
+            else
+                throw new EVException( "PersistenceLayer.save: failed to update a voter" );
+        }
+        catch( SQLException e ) {
+            e.printStackTrace();
+            throw new EVException( "PersistenceLayer.save: failed to update a voter: " + e );
+        }
+
 	}
+
 
 	@Override
 	public ElectoralDistrict restoreVoterBelongsToElectoralDistrict(Voter voter) throws EVException {
