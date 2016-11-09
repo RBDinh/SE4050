@@ -14,6 +14,8 @@ implements VoteRecord {
 
 	//attributes
 	String recordID;
+	String voterName;
+	String ballotID;
 	Date date;
 	Voter voter;
 	Ballot ballot;
@@ -21,7 +23,10 @@ implements VoteRecord {
 	//constructor
 	public VoteRecordImpl()
 	{
+        super( -1 );
 		recordID = null;
+		voterName = null;
+		ballotID = null;
 		date = null;
 		voter = null;
 		ballot = null;
@@ -29,14 +34,31 @@ implements VoteRecord {
 	
 	public VoteRecordImpl(
 			String recordID,
-			Date date,
-			Voter voter,
-			Ballot ballot)
+			String voterName,
+			String ballotID,
+			Date date
+			)
 	{
 		this.recordID = recordID;
+		this.voterName = voterName;
+		this.ballotID = ballotID;
 		this.date = date;
-		this.voter = voter;
-		this.ballot = ballot;
+	}
+
+	public String getVoterName() {
+		return voterName;
+	}
+
+	public void setVoterName(String voterName) {
+		this.voterName = voterName;
+	}
+
+	public String getBallotID() {
+		return ballotID;
+	}
+
+	public void setBallotID(String ballotID) {
+		this.ballotID = ballotID;
 	}
 
 	@Override
@@ -71,8 +93,13 @@ implements VoteRecord {
 
 	@Override
 	public Ballot getBallot() throws EVException {
+		if(ballot == null){
+			ballot = getPersistencaLayer().restoreBallotIncludesBallotItem(this);
+			throw new EVException( "This ballot object is not persistent" );
+		}
+		
 		return ballot;
-	}
+		}
 
 	@Override
 	public void setBallot(Ballot ballot) throws EVException {

@@ -15,18 +15,20 @@ extends Persistent
 implements Ballot {
 
 	//ballot attributes
-	long ballotID;
+	String ballotID;
 	String zip;
 	String EOName;
 	String name;
 	Date openDate;
 	Date closeDate;
 	ElectoralDistrict ED;
+	List<BallotItem> ballotItems;
+	List<VoteRecord> voteRecord;
 	
 	//constructors
 	public BallotImpl()
 	{
-		ballotID = -1;
+		ballotID = null;
 		zip = null;
 		EOName = null;
 		name = null;
@@ -37,7 +39,7 @@ implements Ballot {
 		voteRecord = null;
 	}
 	
-	public BallotImpl(long ballotID,	String zip,
+	public BallotImpl(String ballotID,	String zip,
 			String EOName,
 			String name,
 			Date openDate,
@@ -65,12 +67,12 @@ implements Ballot {
 	}
 
 	@Override
-	public long getBallotID() {
+	public String getBallotID() {
 		return ballotID;
 	}
 
 	@Override
-	public void setBallotID(long ballotID) {
+	public void setBallotID(String ballotID) {
 		this.ballotID = ballotID;
 	}
 
@@ -153,17 +155,6 @@ implements Ballot {
 	public List<VoteRecord> getVoterVoteRecords() throws EVException {
 		return voteRecord;
 	}
-
-	@Override
-	public long getId() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void setId(long id) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 }
