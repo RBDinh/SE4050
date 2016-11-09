@@ -1222,10 +1222,56 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 
 	@Override
 	public void storeCandidateIsCandidateInElection(Candidate candidate, Election election) throws EVException {
-		// TODO Auto-generated method stub
-		storeCandidate(candidate);
-		storeElection(election);
+		String               updateCandidateSql = "UPDATE candidate "
+				+ "SET electionName = ? "
+				+ "WHERE choiceID = ?";
+		
+		PreparedStatement    stmt = null;
+        int                  inscnt;
+        long                 membershipId;
+        
+        if( candidate.isPersistent())
+            throw new EVException( "PersistenceLayer.save: Attempting to update a candidate that isn't persistent" );
+        
+        if( election.isPersistent())
+            throw new EVException( "PersistenceLayer.save: Attempting to update an election that isn't persistent" );
+                              
+        try {
+            stmt = (PreparedStatement) conn.prepareStatement( updateCandidateSql );
+            
+            stmt.setString( 1, election.getElectionName() );
+            stmt.setString( 2, candidate.getChoiceID() );
+            
+            inscnt = stmt.executeUpdate();
+            
+            if( inscnt >= 1 ) {
+                String sql = "select last_insert_id()";
+                if( stmt.execute( sql ) ) { // statement returned a result
+
+                    // retrieve the result
+                    ResultSet r = stmt.getResultSet();
+
+                    // we will use only the first row!
+                    //
+                    while( r.next() ) {
+
+                        // retrieve the last insert auto_increment value
+                        membershipId = r.getLong( 1 );
+                        if( membershipId > 0 )
+                        	voteRecord.setId( membershipId ); // set this membership's db id (proxy object)
+                    }
+                }
+            }
+            else
+                throw new EVException( "PersistenceLayer.save: failed to update a candidate" );
+        }
+        catch( SQLException e ) {
+            e.printStackTrace();
+            throw new EVException( "PersistenceLayer.save: failed to update a candidate: " + e );
+        }
+
 	}
+
 
 	@Override
 	public Election restoreCandidateIsCandidateInElection(Candidate candidate) throws EVException {
