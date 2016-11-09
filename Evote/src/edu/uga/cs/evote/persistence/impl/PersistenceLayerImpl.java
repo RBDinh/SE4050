@@ -126,7 +126,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         List<Voter>   voters = new ArrayList<Voter>();
 	
         condition.setLength( 0 );
-        
+         query.append( selectPersonSql );
         if( modelVoter != null ) {
             if( modelVoter.getVoterName() >= 0 ) // id is unique, so it is sufficient to get a person
                 query.append( " where voterName = " + modelVoter.getVoterName() );
@@ -134,28 +134,29 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         }
         try {
             stmt = conn.createStatement();
-            String voterName;
-            int age;
-            String zip;
-            String userID;
-            Voter nextVoter = null;
-        	ResultSet rs = stmt.getResultSet();
+		 if( stmt.execute( query.toString() ) ) { 
+		    String voterName;
+		    int age;
+		    String zip;
+		    String userID;
+		    Voter nextVoter = null;
+			ResultSet rs = stmt.getResultSet();
 
-            while( rs.next() ) {
-            	voterName = rs.getString( 1 );
-            	age = rs.getInt( 2 );
-            	zip = rs.getString( 3 );
-            	userID = rs.getString( 4 );
-            	
-            	nextVoter = objectLayer.createVoter();
-            	nextVoter.setVoterName(voterName);
-            	nextVoter.setAge(age);
-            	nextVoter.setZip(zip);
-            	nextVoter.setUserID(userID);
-            	
-            	voters.add(nextVoter);
-            }
-            
+		    while( rs.next() ) {
+			voterName = rs.getString( 1 );
+			age = rs.getInt( 2 );
+			zip = rs.getString( 3 );
+			userID = rs.getString( 4 );
+
+			nextVoter = objectLayer.createVoter();
+			nextVoter.setVoterName(voterName);
+			nextVoter.setAge(age);
+			nextVoter.setZip(zip);
+			nextVoter.setUserID(userID);
+
+			voters.add(nextVoter);
+		    }
+		 }
             
         }
         
@@ -253,7 +254,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	        List<Ballot>   ballots = new ArrayList<Ballot>();
 		
 	        condition.setLength( 0 );
-	        
+	         query.append( selectPersonSql );
 	        if( modelBallot != null ) {
 	            if( modelBallot.getBallotID() >= 0 ) // id is unique, so it is sufficient to get a person
 	                query.append( " where ballotID = " + modelBallot.getBallotID() );
@@ -270,27 +271,29 @@ public class PersistenceLayerImpl implements PersistenceLayer {
             	Date closeDate;
             	Ballot nextBallot = null;
             	
-            	ResultSet rs = stmt.getResultSet();
-                
-                // retrieve the retrieved clubs
-                while( rs.next() ) {
-                	ballotID = rs.getLong( 1 );
-                	zip = rs.getString( 2 );
-                	EOName = rs.getString( 3 );
-                	name = rs.getString( 4 );
-                	openDate = rs.getDate( 5 );
-                	closeDate = rs.getDate( 6 );
-                	
-                	nextBallot = objectLayer.createBallot();
-                	nextBallot.setBallotID(ballotID);
-                	nextBallot.setZip(zip);
-                	nextBallot.setEOName(EOName);
-                	nextBallot.setName(name);
-                	nextBallot.setOpenDate(openDate);
-                	nextBallot.setCloseDate(closeDate);
-                	
-                	ballots.add( nextBallot );
-                }
+		if( stmt.execute( query.toString() ) ) {
+			ResultSet rs = stmt.getResultSet();
+
+			// retrieve the retrieved clubs
+			while( rs.next() ) {
+				ballotID = rs.getLong( 1 );
+				zip = rs.getString( 2 );
+				EOName = rs.getString( 3 );
+				name = rs.getString( 4 );
+				openDate = rs.getDate( 5 );
+				closeDate = rs.getDate( 6 );
+
+				nextBallot = objectLayer.createBallot();
+				nextBallot.setBallotID(ballotID);
+				nextBallot.setZip(zip);
+				nextBallot.setEOName(EOName);
+				nextBallot.setName(name);
+				nextBallot.setOpenDate(openDate);
+				nextBallot.setCloseDate(closeDate);
+
+				ballots.add( nextBallot );
+			}
+		}
             }
 	        
 	        catch( Exception e ) {      // just in case...
@@ -388,7 +391,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         List<Candidate>   candidates = new ArrayList<Candidate>();
 	
         condition.setLength( 0 );
-        
+         query.append( selectPersonSql );
         if( modelCandidate != null ) {
             if( modelCandidate.getChoiceID() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where ballotID = " + modelCandidate.getChoiceID() );
@@ -396,37 +399,38 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         }
         
         try {
-            stmt = conn.createStatement();
-            String choiceID;
-        	String electionName;
-        	String partyID;
-        	String title;
-        	int voteCount;
-        	String description;
-        	Candidate nextCandidate = null;
-        	
-        	ResultSet rs = stmt.getResultSet();
-            
-            // retrieve the retrieved clubs
-            while( rs.next() ) {
-            	choiceID = rs.getString(1);
-            	electionName = rs.getString(2);
-            	partyID = rs.getString(3);
-            	title = rs.getString(4);
-            	voteCount = rs.getInt(5);
-            	description = rs.getString(6);
+		stmt = conn.createStatement();
+		if( stmt.execute( query.toString() ) ) {
+		    String choiceID;
+			String electionName;
+			String partyID;
+			String title;
+			int voteCount;
+			String description;
+			Candidate nextCandidate = null;
 
-            	nextCandidate = objectLayer.createCandidate();
-            	nextCandidate.setChoiceID(choiceID);
-            	nextCandidate.setElectionName(electionName);
-            	nextCandidate.setpartyID(partyID);
-            	nextCandidate.setTitle(title);
-            	nextCandidate.setVoteCount(voteCount);
-            	nextCandidate.setDescription(description);
-            	
-            	candidates.add(nextCandidate);
-            }
-        	
+			ResultSet rs = stmt.getResultSet();
+
+		    // retrieve the retrieved clubs
+		    while( rs.next() ) {
+			choiceID = rs.getString(1);
+			electionName = rs.getString(2);
+			partyID = rs.getString(3);
+			title = rs.getString(4);
+			voteCount = rs.getInt(5);
+			description = rs.getString(6);
+
+			nextCandidate = objectLayer.createCandidate();
+			nextCandidate.setChoiceID(choiceID);
+			nextCandidate.setElectionName(electionName);
+			nextCandidate.setpartyID(partyID);
+			nextCandidate.setTitle(title);
+			nextCandidate.setVoteCount(voteCount);
+			nextCandidate.setDescription(description);
+
+			candidates.add(nextCandidate);
+		    }
+		}
         }
         
         catch( Exception e ) {      // just in case...
@@ -529,7 +533,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         List<Election>   elections = new ArrayList<Election>();
 	
         condition.setLength( 0 );
-        
+         query.append( selectPersonSql );
         if( modelElection != null ) {
             if( modelElection.getElectionName() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where id = " + modelElection.getElectionName() );
@@ -537,34 +541,36 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         }
         
         try {
+		
             stmt = conn.createStatement();
-            String electionName;
-            String itemID;
-        	Date startDate;
-        	Date endDate;
-        	Boolean isPartisan;
-        	Election nextElection = null;
-        	
-        	ResultSet rs = stmt.getResultSet();
-            
-            // retrieve the retrieved clubs
-            while( rs.next() ) {
-            	electionName = rs.getString(1);
-            	itemID = rs.getString(2);
-            	startDate = rs.getDate(3);
-            	endDate = rs.getDate(4);
-            	isPartisan = rs.getBoolean(5);
-            	
-            	nextElection.setElectionName(electionName);
-            	nextElection.setItemID(itemID);
-            	nextElection.setStartDate(startDate);
-            	nextElection.setEndDate(endDate);
-            	nextElection.setIsPartisan(isPartisan);
-            	
-            	elections.add(nextElection);
-            	
-            }
-        	
+	if( stmt.execute( query.toString() ) ) {
+		    String electionName;
+		    String itemID;
+			Date startDate;
+			Date endDate;
+			Boolean isPartisan;
+			Election nextElection = null;
+
+			ResultSet rs = stmt.getResultSet();
+
+		    // retrieve the retrieved clubs
+		    while( rs.next() ) {
+			electionName = rs.getString(1);
+			itemID = rs.getString(2);
+			startDate = rs.getDate(3);
+			endDate = rs.getDate(4);
+			isPartisan = rs.getBoolean(5);
+
+			nextElection.setElectionName(electionName);
+			nextElection.setItemID(itemID);
+			nextElection.setStartDate(startDate);
+			nextElection.setEndDate(endDate);
+			nextElection.setIsPartisan(isPartisan);
+
+			elections.add(nextElection);
+
+		    }
+		}
         }
         
         catch( Exception e ) {      // just in case...
@@ -666,7 +672,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         List<ElectoralDistrict>   electionDistricts = new ArrayList<ElectoralDistrict>();
 	
         condition.setLength( 0 );
-        
+         query.append( selectPersonSql );
         if( modelElectoralDistrict != null ) {
             if( modelElectoralDistrict.getZip() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where zip = " + modelElectoralDistrict.getZip() );
@@ -675,23 +681,24 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         
         try {
             stmt = conn.createStatement();
-            String zip;
-            String districtName;
-            ElectoralDistrict nextElectoralDistrict = null;
-            
-            ResultSet rs = stmt.getResultSet();
-            
-            // retrieve the retrieved clubs
-            while( rs.next() ) {
-            	zip = rs.getString(1);
-            	districtName = rs.getString(2);
-            	
-            	nextElectoralDistrict.setZip(zip);
-            	nextElectoralDistrict.setDistrictName(districtName);
-            	
-            	electionDistricts.add(nextElectoralDistrict);
-            }
-            
+	if( stmt.execute( query.toString() ) ) {
+		    String zip;
+		    String districtName;
+		    ElectoralDistrict nextElectoralDistrict = null;
+
+		    ResultSet rs = stmt.getResultSet();
+
+		    // retrieve the retrieved clubs
+		    while( rs.next() ) {
+			zip = rs.getString(1);
+			districtName = rs.getString(2);
+
+			nextElectoralDistrict.setZip(zip);
+			nextElectoralDistrict.setDistrictName(districtName);
+
+			electionDistricts.add(nextElectoralDistrict);
+		    }
+		}
         }
         catch( Exception e ) {      // just in case...
             throw new EVException( "ClubManager.restore: Could not restore persistent Club objects; Root cause: " + e );
@@ -788,7 +795,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         List<Issue>   issues = new ArrayList<Issue>();
 	
         condition.setLength( 0 );
-        
+         query.append( selectPersonSql );
         if( modelIssue != null ) {
             if( modelIssue.getIssueID() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where issueID = " + modelIssue.getIssueID() );
@@ -797,34 +804,36 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         
         try {
             stmt = conn.createStatement();
-            String issueID;
-            String itemID;
-            String questionTitle;
-            String description;
-            int yesCount;
-            int noCount;
-            Issue nextIssue = null;
+	if( stmt.execute( query.toString() ) ) {
+		    String issueID;
+		    String itemID;
+		    String questionTitle;
+		    String description;
+		    int yesCount;
+		    int noCount;
+		    Issue nextIssue = null;
 
-        	ResultSet rs = stmt.getResultSet();
-            
-            // retrieve the retrieved clubs
-            while( rs.next() ) {
-            	issueID = rs.getString(1);
-            	itemID = rs.getString(2);
-            	questionTitle = rs.getString(3);
-            	description = rs.getString(4);
-            	yesCount = rs.getInt(5);
-            	noCount = rs.getInt(6);
-            	
-            	nextIssue.setIssueID(issueID);
-            	nextIssue.setItemID(itemID);
-            	nextIssue.setQuestion(questionTitle);
-            	nextIssue.setDescription(description);
-            	nextIssue.setYesCount(yesCount);
-            	nextIssue.setNoCount(noCount);
-            	
-            	issues.add(nextIssue);
-            }
+			ResultSet rs = stmt.getResultSet();
+
+		    // retrieve the retrieved clubs
+		    while( rs.next() ) {
+			issueID = rs.getString(1);
+			itemID = rs.getString(2);
+			questionTitle = rs.getString(3);
+			description = rs.getString(4);
+			yesCount = rs.getInt(5);
+			noCount = rs.getInt(6);
+
+			nextIssue.setIssueID(issueID);
+			nextIssue.setItemID(itemID);
+			nextIssue.setQuestion(questionTitle);
+			nextIssue.setDescription(description);
+			nextIssue.setYesCount(yesCount);
+			nextIssue.setNoCount(noCount);
+
+			issues.add(nextIssue);
+		    }
+		}
         }
         
         catch( Exception e ) {      // just in case...
@@ -876,7 +885,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         List<PoliticalParty>   politicalParties = new ArrayList<PoliticalParty>();
 	
         condition.setLength( 0 );
-        
+         query.append( selectPersonSql );
         if( modelPoliticalParty != null ) {
             if( modelPoliticalParty.getPartyID() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where partyID = " + modelPoliticalParty.getPartyID() );
@@ -885,25 +894,27 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         
         try {
             stmt = conn.createStatement();
-            String partyID;
-            String partyName;
-            String color;
-            PoliticalParty nextPoliticalParty = null;
-            
-            ResultSet rs = stmt.getResultSet();
-            
-            // retrieve the retrieved clubs
-            while( rs.next() ) {
-            	partyID = rs.getString(1);
-            	partyName = rs.getString(2);
-            	color = rs.getString(3);
-            	
-            	nextPoliticalParty.setPartyID(partyID);
-            	nextPoliticalParty.setPartyName(partyName);
-            	nextPoliticalParty.setColor(color);
-            	
-            	politicalParties.add(nextPoliticalParty);
-            }
+		if( stmt.execute( query.toString() ) ) {
+		    String partyID;
+		    String partyName;
+		    String color;
+		    PoliticalParty nextPoliticalParty = null;
+
+		    ResultSet rs = stmt.getResultSet();
+
+		    // retrieve the retrieved clubs
+		    while( rs.next() ) {
+			partyID = rs.getString(1);
+			partyName = rs.getString(2);
+			color = rs.getString(3);
+
+			nextPoliticalParty.setPartyID(partyID);
+			nextPoliticalParty.setPartyName(partyName);
+			nextPoliticalParty.setColor(color);
+
+			politicalParties.add(nextPoliticalParty);
+		    }
+	}
             
         }
         
@@ -955,7 +966,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         List<VoteRecord>   voteRecords = new ArrayList<VoteRecord>();
 	
         condition.setLength( 0 );
-        
+         query.append( selectPersonSql );
         if( modelVoteRecord != null ) {
             if( modelVoteRecord.getRecordID() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where recordID = " + modelVoteRecord.getRecordID() );
@@ -964,27 +975,29 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         
         try {
             stmt = conn.createStatement();
-            String recordID;
-            String voterID;
-            String ballotID;
-            Date date;
-            VoteRecord nextVoteRecord = null;
-            
-            ResultSet rs = stmt.getResultSet();
-            
-            // retrieve the retrieved clubs
-            while( rs.next() ) {
-            	recordID = rs.getString(1);
-            	voterID = rs.getString(2);
-            	ballotID = rs.getString(3);
-            	date = rs.getDate(4);
-            	
-            	nextVoteRecord.setRecordID(recordID);
-            	nextVoteRecord.setVoterID(voterID);
-            	nextVoteRecord.setBallotID(ballotID);
-            	nextVoteRecord.setDate(date);
-            	voteRecords.add(nextVoteRecord);
-            }
+	if( stmt.execute( query.toString() ) ) {
+		    String recordID;
+		    String voterID;
+		    String ballotID;
+		    Date date;
+		    VoteRecord nextVoteRecord = null;
+
+		    ResultSet rs = stmt.getResultSet();
+
+		    // retrieve the retrieved clubs
+		    while( rs.next() ) {
+			recordID = rs.getString(1);
+			voterID = rs.getString(2);
+			ballotID = rs.getString(3);
+			date = rs.getDate(4);
+
+			nextVoteRecord.setRecordID(recordID);
+			nextVoteRecord.setVoterID(voterID);
+			nextVoteRecord.setBallotID(ballotID);
+			nextVoteRecord.setDate(date);
+			voteRecords.add(nextVoteRecord);
+		    }
+		}
         }
         
         catch( Exception e ) {      // just in case...
@@ -1097,7 +1110,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
     	Ballot nextBallot = null;
 
         condition.setLength( 0 );
-        
+         query.append( selectPersonSql );
         if( ballotItem != null ) {
             if( ballotItem.getBallotID() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where  ballotID = " + ballotItem.getBallotID() );
@@ -1106,33 +1119,35 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         
         try {
             stmt = conn.createStatement();
-            long ballotID;
-        	String zip;
-        	String EOName;
-        	String name;
-        	Date openDate;
-        	Date closeDate;
-        	
-        	ResultSet rs = stmt.getResultSet();
-            
-            // retrieve the retrieved clubs
-            while( rs.next() ) {
-            	ballotID = rs.getLong( 1 );
-            	zip = rs.getString( 2 );
-            	EOName = rs.getString( 3 );
-            	name = rs.getString( 4 );
-            	openDate = rs.getDate( 5 );
-            	closeDate = rs.getDate( 6 );
-            	
-            	nextBallot = objectLayer.createBallot();
-            	nextBallot.setBallotID(ballotID);
-            	nextBallot.setZip(zip);
-            	nextBallot.setEOName(EOName);
-            	nextBallot.setName(name);
-            	nextBallot.setOpenDate(openDate);
-            	nextBallot.setCloseDate(closeDate);
-            	
-            }
+	if( stmt.execute( query.toString() ) ) {
+		    long ballotID;
+			String zip;
+			String EOName;
+			String name;
+			Date openDate;
+			Date closeDate;
+
+			ResultSet rs = stmt.getResultSet();
+
+		    // retrieve the retrieved clubs
+		    while( rs.next() ) {
+			ballotID = rs.getLong( 1 );
+			zip = rs.getString( 2 );
+			EOName = rs.getString( 3 );
+			name = rs.getString( 4 );
+			openDate = rs.getDate( 5 );
+			closeDate = rs.getDate( 6 );
+
+			nextBallot = objectLayer.createBallot();
+			nextBallot.setBallotID(ballotID);
+			nextBallot.setZip(zip);
+			nextBallot.setEOName(EOName);
+			nextBallot.setName(name);
+			nextBallot.setOpenDate(openDate);
+			nextBallot.setCloseDate(closeDate);
+
+		    }
+		}
         }
         
         catch( Exception e ) {      // just in case...
@@ -1154,7 +1169,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
     	List<BallotItem> ballotItems = new ArrayList<BallotItem>();
 
         condition.setLength( 0 );
-        
+         query.append( selectPersonSql );
         if( ballot != null ) {
             if( ballot.getBallotID() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where  ballotID = " + ballot.getBallotID() );
@@ -1163,25 +1178,26 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         
         try {
             stmt = conn.createStatement();
-            String itemID;
-            String ballotID;
-            int voteCount;
-            BallotItem nextBallotItem = null;
-            
-            ResultSet rs = stmt.getResultSet();
-            
-            // retrieve the retrieved clubs
-            while( rs.next() ) {
-            	itemID = rs.getString(1);
-            	ballotID = rs.getString(2);
-            	voteCount = rs.getInt(3);
-            	
-            	nextBallotItem.setItemID(itemID);
-            	nextBallotItem.setBallotID(ballotID);
-            	nextBallotItem.setVoteCount(voteCount);
-            	ballotItems.add(nextBallotItem);
-            }
-            
+		if( stmt.execute( query.toString() ) ) {
+		    String itemID;
+		    String ballotID;
+		    int voteCount;
+		    BallotItem nextBallotItem = null;
+
+		    ResultSet rs = stmt.getResultSet();
+
+		    // retrieve the retrieved clubs
+		    while( rs.next() ) {
+			itemID = rs.getString(1);
+			ballotID = rs.getString(2);
+			voteCount = rs.getInt(3);
+
+			nextBallotItem.setItemID(itemID);
+			nextBallotItem.setBallotID(ballotID);
+			nextBallotItem.setVoteCount(voteCount);
+			ballotItems.add(nextBallotItem);
+		    }
+		}
         }
         
         catch( Exception e ) {      // just in case...
@@ -1283,7 +1299,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
     	Election nextElection = null;
 	
         condition.setLength( 0 );
-        
+         query.append( selectPersonSql );
         if( candidate != null ) {
             if( candidate.getElectionName() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where electionName = " + candidate.getElectionName() );
@@ -1292,31 +1308,32 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         
         try {
             stmt = conn.createStatement();
-            String electionName;
-            String itemID;
-        	Date startDate;
-        	Date endDate;
-        	Boolean isPartisan;
-        	
-        	ResultSet rs = stmt.getResultSet();
-            
-            // retrieve the retrieved clubs
-            while( rs.next() ) {
-            	electionName = rs.getString(1);
-            	itemID = rs.getString(2);
-            	startDate = rs.getDate(3);
-            	endDate = rs.getDate(4);
-            	isPartisan = rs.getBoolean(5);
-            	
-            	nextElection.setElectionName(electionName);
-            	nextElection.setItemID(itemID);
-            	nextElection.setStartDate(startDate);
-            	nextElection.setEndDate(endDate);
-            	nextElection.setIsPartisan(isPartisan);
-            	
-            	
-            }
-        	
+	if( stmt.execute( query.toString() ) ) {
+		    String electionName;
+		    String itemID;
+			Date startDate;
+			Date endDate;
+			Boolean isPartisan;
+
+			ResultSet rs = stmt.getResultSet();
+
+		    // retrieve the retrieved clubs
+		    while( rs.next() ) {
+			electionName = rs.getString(1);
+			itemID = rs.getString(2);
+			startDate = rs.getDate(3);
+			endDate = rs.getDate(4);
+			isPartisan = rs.getBoolean(5);
+
+			nextElection.setElectionName(electionName);
+			nextElection.setItemID(itemID);
+			nextElection.setStartDate(startDate);
+			nextElection.setEndDate(endDate);
+			nextElection.setIsPartisan(isPartisan);
+
+
+		    }
+		}
         }
         
         catch( Exception e ) {      // just in case...
@@ -1336,7 +1353,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         List<Candidate>   candidates = new ArrayList<Candidate>();
 	
         condition.setLength( 0 );
-        
+         query.append( selectPersonSql );
         if( election != null ) {
             if( election.getElectionName() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where electionName = " + election.getElectionName() );
@@ -1345,36 +1362,37 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         
         try {
             stmt = conn.createStatement();
-            String choiceID;
-        	String electionName;
-        	String partyID;
-        	String title;
-        	int voteCount;
-        	String description;
-        	Candidate nextCandidate = null;
-        	
-        	ResultSet rs = stmt.getResultSet();
-            
-            // retrieve the retrieved clubs
-            while( rs.next() ) {
-            	choiceID = rs.getString(1);
-            	electionName = rs.getString(2);
-            	partyID = rs.getString(3);
-            	title = rs.getString(4);
-            	voteCount = rs.getInt(5);
-            	description = rs.getString(6);
+		if( stmt.execute( query.toString() ) ) {
+		    String choiceID;
+			String electionName;
+			String partyID;
+			String title;
+			int voteCount;
+			String description;
+			Candidate nextCandidate = null;
 
-            	nextCandidate = objectLayer.createCandidate();
-            	nextCandidate.setChoiceID(choiceID);
-            	nextCandidate.setElectionName(electionName);
-            	nextCandidate.setpartyID(partyID);
-            	nextCandidate.setTitle(title);
-            	nextCandidate.setVoteCount(voteCount);
-            	nextCandidate.setDescription(description);
-            	
-            	candidates.add(nextCandidate);
-            }
-        	
+			ResultSet rs = stmt.getResultSet();
+
+		    // retrieve the retrieved clubs
+		    while( rs.next() ) {
+			choiceID = rs.getString(1);
+			electionName = rs.getString(2);
+			partyID = rs.getString(3);
+			title = rs.getString(4);
+			voteCount = rs.getInt(5);
+			description = rs.getString(6);
+
+			nextCandidate = objectLayer.createCandidate();
+			nextCandidate.setChoiceID(choiceID);
+			nextCandidate.setElectionName(electionName);
+			nextCandidate.setpartyID(partyID);
+			nextCandidate.setTitle(title);
+			nextCandidate.setVoteCount(voteCount);
+			nextCandidate.setDescription(description);
+
+			candidates.add(nextCandidate);
+		    }
+		}	
         }
         
         catch( Exception e ) {      // just in case...
@@ -1417,54 +1435,10 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	@Override
 	public void storeElectoralDistrictHasBallotBallot(ElectoralDistrict electoralDistrict, Ballot ballot)
 			throws EVException {
-
-		String               updateCandidateSql = "UPDATE ballot "
-				+ "SET zip = ? "
-				+ "WHERE ballotID = ?";
-		
-		PreparedStatement    stmt = null;
-        int                  inscnt;
-        long                 membershipId;
-        
-        if( candidate.isPersistent())
-            throw new EVException( "PersistenceLayer.save: Attempting to update an ballot that isn't persistent" );
-                              
-        try {
-            stmt = (PreparedStatement) conn.prepareStatement( updateCandidateSql );
-            
-            stmt.setString( 1, electoralDistrict.getZip() );
-            stmt.setString( 2, ballot.getBallotID() );
-            
-            inscnt = stmt.executeUpdate();
-            
-            if( inscnt >= 1 ) {
-                String sql = "select last_insert_id()";
-                if( stmt.execute( sql ) ) { // statement returned a result
-
-                    // retrieve the result
-                    ResultSet r = stmt.getResultSet();
-
-                    // we will use only the first row!
-                    //
-                    while( r.next() ) {
-
-                        // retrieve the last insert auto_increment value
-                        membershipId = r.getLong( 1 );
-                        if( membershipId > 0 )
-                        	voteRecord.setId( membershipId ); // set this membership's db id (proxy object)
-                    }
-                }
-            }
-            else
-                throw new EVException( "PersistenceLayer.save: failed to update a ballot" );
-        }
-        catch( SQLException e ) {
-            e.printStackTrace();
-            throw new EVException( "PersistenceLayer.save: failed to update a ballot: " + e );
-        }
-
+		// TODO Auto-generated method stub
+		storeElectoralDistrict(electoralDistrict);
+		storeBallot(ballot);
 	}
-
 
 	@Override
 	public ElectoralDistrict restoreElectoralDistrictHasBallotBallot(Ballot ballot) throws EVException {
@@ -1476,7 +1450,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         ElectoralDistrict nextElectoralDistrict = null;
 	
         condition.setLength( 0 );
-        
+         query.append( selectPersonSql );
         if( ballot != null ) {
             if( ballot.getZip() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where zip = " + ballot.getZip() );
@@ -1485,21 +1459,22 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         
         try {
             stmt = conn.createStatement();
-            String zip;
-            String districtName;
-            
-            ResultSet rs = stmt.getResultSet();
-            
-            // retrieve the retrieved clubs
-            while( rs.next() ) {
-            	zip = rs.getString(1);
-            	districtName = rs.getString(2);
-            	
-            	nextElectoralDistrict.setZip(zip);
-            	nextElectoralDistrict.setDistrictName(districtName);
-            	
-            }
-            
+		if( stmt.execute( query.toString() ) ) {
+		    String zip;
+		    String districtName;
+
+		    ResultSet rs = stmt.getResultSet();
+
+		    // retrieve the retrieved clubs
+		    while( rs.next() ) {
+			zip = rs.getString(1);
+			districtName = rs.getString(2);
+
+			nextElectoralDistrict.setZip(zip);
+			nextElectoralDistrict.setDistrictName(districtName);
+
+		    }
+		} 
         }
         catch( Exception e ) {      // just in case...
             throw new EVException( "ClubManager.restore: Could not restore persistent Club objects; Root cause: " + e );
@@ -1519,7 +1494,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         List<Ballot>   ballots = new ArrayList<Ballot>();
 	
         condition.setLength( 0 );
-        
+         query.append( selectPersonSql );
         if( electoralDistrict != null ) {
             if( electoralDistrict.getZip() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where zip = " + electoralDistrict.getZip() );
@@ -1528,35 +1503,37 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         
         try {
             stmt = conn.createStatement();
-            long ballotID;
-        	String zip;
-        	String EOName;
-        	String name;
-        	Date openDate;
-        	Date closeDate;
-        	Ballot nextBallot = null;
-        	
-        	ResultSet rs = stmt.getResultSet();
-            
-            // retrieve the retrieved clubs
-            while( rs.next() ) {
-            	ballotID = rs.getLong( 1 );
-            	zip = rs.getString( 2 );
-            	EOName = rs.getString( 3 );
-            	name = rs.getString( 4 );
-            	openDate = rs.getDate( 5 );
-            	closeDate = rs.getDate( 6 );
-            	
-            	nextBallot = objectLayer.createBallot();
-            	nextBallot.setBallotID(ballotID);
-            	nextBallot.setZip(zip);
-            	nextBallot.setEOName(EOName);
-            	nextBallot.setName(name);
-            	nextBallot.setOpenDate(openDate);
-            	nextBallot.setCloseDate(closeDate);
-            	
-            	ballots.add( nextBallot );
-            }
+		if( stmt.execute( query.toString() ) ) {
+		    long ballotID;
+			String zip;
+			String EOName;
+			String name;
+			Date openDate;
+			Date closeDate;
+			Ballot nextBallot = null;
+
+			ResultSet rs = stmt.getResultSet();
+
+		    // retrieve the retrieved clubs
+		    while( rs.next() ) {
+			ballotID = rs.getLong( 1 );
+			zip = rs.getString( 2 );
+			EOName = rs.getString( 3 );
+			name = rs.getString( 4 );
+			openDate = rs.getDate( 5 );
+			closeDate = rs.getDate( 6 );
+
+			nextBallot = objectLayer.createBallot();
+			nextBallot.setBallotID(ballotID);
+			nextBallot.setZip(zip);
+			nextBallot.setEOName(EOName);
+			nextBallot.setName(name);
+			nextBallot.setOpenDate(openDate);
+			nextBallot.setCloseDate(closeDate);
+
+			ballots.add( nextBallot );
+		    }
+		}
         }
         
         catch( Exception e ) {      // just in case...
@@ -1601,53 +1578,9 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	public void storeCandidateIsMemberOfPoliticalParty(Candidate candidate, PoliticalParty politicalParty)
 			throws EVException {
 		// TODO Auto-generated method stub
-		String               updateCandidateSql = "UPDATE candidate "
-				+ "SET partyID = ? "
-				+ "WHERE title = ?";
-		
-		PreparedStatement    stmt = null;
-        int                  inscnt;
-        long                 membershipId;
-        
-        if( candidate.isPersistent())
-            throw new EVException( "PersistenceLayer.save: Attempting to update a candidate that isn't persistent" );
-                              
-        try {
-            stmt = (PreparedStatement) conn.prepareStatement( updateCandidateSql );
-            
-            stmt.setString( 1, politicalParty.getPartyID() );
-            stmt.setString( 2, candidate.getTitle() );
-            
-            inscnt = stmt.executeUpdate();
-            
-            if( inscnt >= 1 ) {
-                String sql = "select last_insert_id()";
-                if( stmt.execute( sql ) ) { // statement returned a result
-
-                    // retrieve the result
-                    ResultSet r = stmt.getResultSet();
-
-                    // we will use only the first row!
-                    //
-                    while( r.next() ) {
-
-                        // retrieve the last insert auto_increment value
-                        membershipId = r.getLong( 1 );
-                        if( membershipId > 0 )
-                        	voteRecord.setId( membershipId ); // set this membership's db id (proxy object)
-                    }
-                }
-            }
-            else
-                throw new EVException( "PersistenceLayer.save: failed to update a candidate" );
-        }
-        catch( SQLException e ) {
-            e.printStackTrace();
-            throw new EVException( "PersistenceLayer.save: failed to update a candidate: " + e );
-        }
-
+		storeCandidate(candidate);
+		storePoliticalParty(politicalParty);
 	}
-
 
 	@Override
 	public PoliticalParty restoreCandidateIsMemberOfPoliticalParty(Candidate candidate) throws EVException {
@@ -1659,7 +1592,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         PoliticalParty nextPoliticalParty = null;
 	
         condition.setLength( 0 );
-        
+         query.append( selectPersonSql );
         if( candidate != null ) {
             if( candidate.getPartyID() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where partyID = " + candidate.getPartyID() );
@@ -1668,24 +1601,25 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         
         try {
             stmt = conn.createStatement();
-            String partyID;
-            String partyName;
-            String color;
-            
-            ResultSet rs = stmt.getResultSet();
-            
-            // retrieve the retrieved clubs
-            while( rs.next() ) {
-            	partyID = rs.getString(1);
-            	partyName = rs.getString(2);
-            	color = rs.getString(3);
-            	
-            	nextPoliticalParty.setPartyID(partyID);
-            	nextPoliticalParty.setPartyName(partyName);
-            	nextPoliticalParty.setColor(color);
-            	
-            }
-            
+		if( stmt.execute( query.toString() ) ) {
+		    String partyID;
+		    String partyName;
+		    String color;
+
+		    ResultSet rs = stmt.getResultSet();
+
+		    // retrieve the retrieved clubs
+		    while( rs.next() ) {
+			partyID = rs.getString(1);
+			partyName = rs.getString(2);
+			color = rs.getString(3);
+
+			nextPoliticalParty.setPartyID(partyID);
+			nextPoliticalParty.setPartyName(partyName);
+			nextPoliticalParty.setColor(color);
+
+		    }
+		}
         }
         
         catch( Exception e ) {      // just in case...
@@ -1704,7 +1638,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         List<Candidate>   candidates = new ArrayList<Candidate>();
 	
         condition.setLength( 0 );
-        
+         query.append( selectPersonSql );
         if( politicalParty != null ) {
             if( politicalParty.getPartyID() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where partyID = " + politicalParty.getPartyID() );
@@ -1713,36 +1647,37 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         
         try {
             stmt = conn.createStatement();
-            String choiceID;
-        	String electionName;
-        	String partyID;
-        	String title;
-        	int voteCount;
-        	String description;
-        	Candidate nextCandidate = null;
-        	
-        	ResultSet rs = stmt.getResultSet();
-            
-            // retrieve the retrieved clubs
-            while( rs.next() ) {
-            	choiceID = rs.getString(1);
-            	electionName = rs.getString(2);
-            	partyID = rs.getString(3);
-            	title = rs.getString(4);
-            	voteCount = rs.getInt(5);
-            	description = rs.getString(6);
+		if( stmt.execute( query.toString() ) ) {
+		    String choiceID;
+			String electionName;
+			String partyID;
+			String title;
+			int voteCount;
+			String description;
+			Candidate nextCandidate = null;
 
-            	nextCandidate = objectLayer.createCandidate();
-            	nextCandidate.setChoiceID(choiceID);
-            	nextCandidate.setElectionName(electionName);
-            	nextCandidate.setpartyID(partyID);
-            	nextCandidate.setTitle(title);
-            	nextCandidate.setVoteCount(voteCount);
-            	nextCandidate.setDescription(description);
-            	
-            	candidates.add(nextCandidate);
-            }
-        	
+			ResultSet rs = stmt.getResultSet();
+
+		    // retrieve the retrieved clubs
+		    while( rs.next() ) {
+			choiceID = rs.getString(1);
+			electionName = rs.getString(2);
+			partyID = rs.getString(3);
+			title = rs.getString(4);
+			voteCount = rs.getInt(5);
+			description = rs.getString(6);
+
+			nextCandidate = objectLayer.createCandidate();
+			nextCandidate.setChoiceID(choiceID);
+			nextCandidate.setElectionName(electionName);
+			nextCandidate.setpartyID(partyID);
+			nextCandidate.setTitle(title);
+			nextCandidate.setVoteCount(voteCount);
+			nextCandidate.setDescription(description);
+
+			candidates.add(nextCandidate);
+		    }
+		}
         }
         
         catch( Exception e ) {      // just in case...
@@ -1801,7 +1736,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         ElectoralDistrict nextElectoralDistrict = null;
         
         condition.setLength( 0 );
-        
+         query.append( selectPersonSql );
         if( voter != null ) {
             if( voter.getZip() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where zip = " + voter.getZip() );
@@ -1810,21 +1745,22 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         
         try {
             stmt = conn.createStatement();
-            String zip;
-            String districtName;
-            
-            ResultSet rs = stmt.getResultSet();
-            
-            // retrieve the retrieved clubs
-            while( rs.next() ) {
-            	zip = rs.getString(1);
-            	districtName = rs.getString(2);
-            	
-            	nextElectoralDistrict.setZip(zip);
-            	nextElectoralDistrict.setDistrictName(districtName);
-            	
-            }
-            
+		if( stmt.execute( query.toString() ) ) {
+		    String zip;
+		    String districtName;
+
+		    ResultSet rs = stmt.getResultSet();
+
+		    // retrieve the retrieved clubs
+		    while( rs.next() ) {
+			zip = rs.getString(1);
+			districtName = rs.getString(2);
+
+			nextElectoralDistrict.setZip(zip);
+			nextElectoralDistrict.setDistrictName(districtName);
+
+		    }
+		}
         }
         catch( Exception e ) {      // just in case...
             throw new EVException( "ClubManager.restore: Could not restore persistent Club objects; Root cause: " + e );
@@ -1843,7 +1779,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         List<Voter>   voters = new ArrayList<Voter>();
 	
         condition.setLength( 0 );
-        
+         query.append( selectPersonSql );
         if( electoralDistrict != null ) {
             if( electoralDistrict.getZip() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where zip = " + electoralDistrict.getZip() );
@@ -1851,29 +1787,30 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         }
         try {
             stmt = conn.createStatement();
-            String voterName;
-            int age;
-            String zip;
-            String userID;
-            Voter nextVoter = null;
-        	ResultSet rs = stmt.getResultSet();
+		if( stmt.execute( query.toString() ) ) {
+		    String voterName;
+		    int age;
+		    String zip;
+		    String userID;
+		    Voter nextVoter = null;
+			ResultSet rs = stmt.getResultSet();
 
-            while( rs.next() ) {
-            	voterName = rs.getString( 1 );
-            	age = rs.getInt( 2 );
-            	zip = rs.getString( 3 );
-            	userID = rs.getString( 4 );
-            	
-            	nextVoter = objectLayer.createVoter();
-            	nextVoter.setVoterName(voterName);
-            	nextVoter.setAge(age);
-            	nextVoter.setZip(zip);
-            	nextVoter.setUserID(userID);
-            	
-            	voters.add(nextVoter);
-            }
+		    while( rs.next() ) {
+			voterName = rs.getString( 1 );
+			age = rs.getInt( 2 );
+			zip = rs.getString( 3 );
+			userID = rs.getString( 4 );
+
+			nextVoter = objectLayer.createVoter();
+			nextVoter.setVoterName(voterName);
+			nextVoter.setAge(age);
+			nextVoter.setZip(zip);
+			nextVoter.setUserID(userID);
+
+			voters.add(nextVoter);
+		    }
             
-            
+		}
         }
         
         catch( Exception e ) {      // just in case...
