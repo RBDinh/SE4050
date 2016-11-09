@@ -15,7 +15,7 @@ implements Voter {
 	//attributes
 	String firstName;
 	String lastName;
-	String userID;
+	String userName;
 	String password;
 	String emailAddress;
 	String address;
@@ -29,7 +29,7 @@ implements Voter {
 	{
 		firstName = null;
 		lastName = null;
-		userID = null;
+		userName = null;
 		password = null;
 		emailAddress = null;
 		address = null;
@@ -42,7 +42,7 @@ implements Voter {
 	public VoterImpl(
 			String firstName,
 			String lastName,
-			String userID,
+			String userName,
 			String password,
 			String emailAddress,
 			String address,
@@ -53,7 +53,7 @@ implements Voter {
 	{
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.userID = userID;
+		this.userName = userName;
 		this.password = password;
 		this.emailAddress = emailAddress;
 		this.address = address;
@@ -83,12 +83,14 @@ implements Voter {
 		this.lastName = lastName;
 	}
 
-	public String getUserID() {
-		return userID;
+	@Override
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setUserID(String userID) {
-		this.userID = userID;
+	@Override
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	@Override
@@ -154,18 +156,6 @@ implements Voter {
 	@Override
 	public List<VoteRecord> getBallotVoteRecords() throws EVException {
 		return voteRecord;
-	}
-
-	@Override
-	public String getUserName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setUserName(String userName) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
