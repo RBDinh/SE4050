@@ -2,7 +2,7 @@
 
 import java.util.Date;
 import java.util.List;
-/*
+
 import edu.uga.cs.evote.EVException;
 import edu.uga.cs.evote.entity.Ballot;
 import edu.uga.cs.evote.entity.Candidate;
@@ -13,16 +13,10 @@ import edu.uga.cs.evote.entity.Issue;
 import edu.uga.cs.evote.entity.PoliticalParty;
 import edu.uga.cs.evote.entity.VoteRecord;
 import edu.uga.cs.evote.entity.Voter;
-*/
-
-import edu.uga.cs.evote.EVException;
-import edu.uga.cs.evote.entity.impl.*;
-import edu.uga.cs.evote.object.ObjectLayer;
-import edu.uga.cs.evote.persistence.impl.*;
 
 public class ObjectLayerImpl implements ObjectLayer
 {
-    PersistenceLayerImpl persistence = null;
+    PersistenceLayer persistence = null;
     
     public ObjectLayerImpl()
     {
@@ -47,10 +41,10 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new ElectionsOfficer object instance with the given attribute values
      * @throws EVException in case either firstName, lastName, or userName is null
      */
-    public ElectionsOfficerImpl createElectionsOfficer( String firstName, String lastName, String userName, 
+    public ElectionsOfficer createElectionsOfficer( String firstName, String lastName, String userName, 
                                                     String password, String emailAddress, String address ) throws EVException {
-        ElectionsOfficerImpl eo = new ElectionsOfficerImpl(firstName, lastName, userName, password, emailAddress, address);
-        eo.setPersistenceLayerImpl(persistence);
+        ElectionsOfficer eo = new ElectionsOfficer(firstName, lastName, userName, password, emailAddress, address);
+        eo.setPersistenceLayer(persistence);
         return eo;
     }
 
@@ -58,10 +52,10 @@ public class ObjectLayerImpl implements ObjectLayer
      * Create a new ElectionsOfficer object with undefined attribute values.
      * @return a new ElectionsOfficer object instance
      */
-    public ElectionsOfficerImpl createElectionsOfficer() {
-        ElectionsOfficerImpl eo = new ElectionsOfficerImpl(null, null, null, null, null, null);
+    public ElectionsOfficer createElectionsOfficer() {
+        ElectionsOfficer eo = new ElectionsOfficer(null, null, null, null, null, null);
         eo.setId(-1);
-        eo.setPersistenceLayerImpl(persistence);
+        eo.setPersistenceLayer(persistence);
         return eo;
     }
     
@@ -71,7 +65,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a List of the located ElectionsOfficer objects
      * @throws EVException in case there is a problem with the retrieval of the requested objects
      */
-    public List<ElectionsOfficerImpl> findElectionsOfficer( ElectionsOfficerImpl modelElectionsOfficer ) throws EVException {
+    public List<ElectionsOfficer> findElectionsOfficer( ElectionsOfficer modelElectionsOfficer ) throws EVException {
         return persistence.restoreElectionsOfficer(modelElectionsOfficer);
     }
     
@@ -80,7 +74,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @param electionsOfficer the object to be persisted
      * @throws EVException in case there was an error while persisting the object
      */
-    public void storeElectionsOfficer( ElectionsOfficerImpl electionsOfficer ) throws EVException {
+    public void storeElectionsOfficer( ElectionsOfficer electionsOfficer ) throws EVException {
         persistence.storeElectionsOfficer(electionsOfficer);
     }
     
@@ -89,7 +83,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @param electionsOfficer the object to be deleted.
      * @throws EVException in case there is a problem with the deletion of the object
      */
-    public void deleteElectionsOfficer( ElectionsOfficerImpl electionsOfficer ) throws EVException {
+    public void deleteElectionsOfficer( ElectionsOfficer electionsOfficer ) throws EVException {
         persistence.deleteElectionsOfficer(electionsOfficer);
     }
     
@@ -105,10 +99,10 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new Voter object instance with the given attribute values
      * @throws EVException in case any of the String parameters is null or if age is not positive
      */
-    public VoterImpl createVoter( String firstName, String lastName, String userName, String password, 
+    public Voter createVoter( String firstName, String lastName, String userName, String password, 
             String emailAddress, String address, int age ) throws EVException {
-        VoterImpl voter = new VoterImpl(firstName, lastName, userName, password, emailAddress, address, age);
-        voter.setPersistenceLayerImpl(persistence);
+        Voter voter = new Voter(firstName, lastName, userName, password, emailAddress, address, age);
+        voter.setPersistenceLayer(persistence);
         return voter;
     }
 
@@ -116,10 +110,10 @@ public class ObjectLayerImpl implements ObjectLayer
      * Create a new Voter object with undefined attribute values.
      * @return a new Voter object instance
      */
-    public VoterImpl createVoter() {
-        VoterImpl voter = new VoterImpl(null, null, null, null, null, null, -1);
+    public Voter createVoter() {
+        Voter voter = new Voter(null, null, null, null, null, null, -1);
         voter.setId(-1);
-        voter.setPersistenceLayerImpl(persistence);
+        voter.setPersistenceLayer(persistence);
         return voter;
     }
     
@@ -129,7 +123,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a List of the located Voter objects
      * @throws EVException in case there is a problem with the retrieval of the requested objects
      */
-    public List<VoterImpl> findVoter( VoterImpl modelVoter ) throws EVException {
+    public List<Voter> findVoter( Voter modelVoter ) throws EVException {
         return persistence.restoreVoter(modelVoter);
     }
     
@@ -138,7 +132,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @param voter the object to be persisted
      * @throws EVException in case there was an error while persisting the object
      */
-    public void storeVoter( VoterImpl voter ) throws EVException {
+    public void storeVoter( Voter voter ) throws EVException {
         persistence.storeVoter(voter);
     }
     
@@ -147,7 +141,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @param voter the object to be deleted.
      * @throws EVException in case there is a problem with the deletion of the object
      */
-    public void deleteVoter( VoterImpl voter ) throws EVException {
+    public void deleteVoter( Voter voter ) throws EVException {
         persistence.deleteVoter(voter);
     }
  
@@ -157,8 +151,8 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new PoliticalParty object instance with the given attribute values
      * @throws EVException in case name is null
      */
-    public PoliticalPartyImpl createPoliticalParty( String name ) throws EVException {
-        PoliticalPartyImpl politicalParty = new PoliticalPartyImpl(name);
+    public PoliticalParty createPoliticalParty( String name ) throws EVException {
+        PoliticalParty politicalParty = new PoliticalParty(name);
         persistence.setPoliticalParty(politicalParty);
         return politicalParty;
     }
@@ -167,8 +161,8 @@ public class ObjectLayerImpl implements ObjectLayer
      * Create a new PoliticalParty object with undefined attribute values.
      * @return a new PoliticalParty object instance
      */
-    public PoliticalPartyImpl createPoliticalParty() {
-        PoliticalPartyImpl politicalParty = new PoliticalPartyImpl(null);
+    public PoliticalParty createPoliticalParty() {
+        PoliticalParty politicalParty = new PoliticalParty(null);
         politicalParty.setId(-1);
         persistence.setPoliticalParty(politicalParty);
         return politicalParty;
@@ -180,7 +174,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a List of the located PoliticalParty objects
      * @throws EVException in case there is a problem with the retrieval of the requested objects
      */
-    public List<PoliticalPartyImpl> findPoliticalParty( PoliticalPartyImpl modelPoliticalParty ) throws EVException {
+    public List<PoliticalParty> findPoliticalParty( PoliticalParty modelPoliticalParty ) throws EVException {
         return persistence.restorePoliticalParty(modelPoliticalParty);
     }
     
@@ -189,7 +183,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @param politicalParty the object to be persisted
      * @throws EVException in case there was an error while persisting the object
      */
-    public void storePoliticalParty( PoliticalPartyImpl politicalParty ) throws EVException {
+    public void storePoliticalParty( PoliticalParty politicalParty ) throws EVException {
         persistence.storePoliticalParty(politicalParty);
     }
     
@@ -198,7 +192,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @param politicalParty the object to be deleted.
      * @throws EVException in case there is a problem with the deletion of the object
      */
-    public void deletePoliticalParty( PoliticalPartyImpl politicalParty ) throws EVException {
+    public void deletePoliticalParty( PoliticalParty politicalParty ) throws EVException {
         persistence.storePoliticalParty(politicalParty);
     }
 
@@ -208,8 +202,8 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new ElectoralDistrict object instance with the given attribute values
      * @throws EVException in case name is null
      */
-    public ElectoralDistrictImpl createElectoralDistrict( String name ) throws EVException {
-        ElectoralDistrictImpl electoralDistrict = new ElectoralDistrictImpl(name);
+    public ElectoralDistrict createElectoralDistrict( String name ) throws EVException {
+        ElectoralDistrict electoralDistrict = new ElectoralDistrict(name);
         persistence.setElectoralDistrict(electoralDistrict);
         return electoralDistrict;
     }
@@ -218,8 +212,8 @@ public class ObjectLayerImpl implements ObjectLayer
      * Create a new ElectoralDistrict object with undefined attribute values.
      * @return a new ElectoralDistrict object instance
      */
-    public ElectoralDistrictImpl createElectoralDistrict() {
-        ElectoralDistrictImpl electoralDistrict = new ElectoralDistrictImpl(null);
+    public ElectoralDistrict createElectoralDistrict() {
+        ElectoralDistrict electoralDistrict = new ElectoralDistrict(null);
         electoralDistrict.setId(-1);
         persistence.setElectoralDistrict(electoralDistrict);
         return electoralDistrict;
@@ -231,7 +225,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a List of the located ElectoralDistrict objects
      * @throws EVException in case there is a problem with the retrieval of the requested objects
      */
-    public List<ElectoralDistrictImpl> findElectoralDistrict( ElectoralDistrictImpl modelElectoralDistrict ) throws EVException {
+    public List<ElectoralDistrict> findElectoralDistrict( ElectoralDistrict modelElectoralDistrict ) throws EVException {
         return persistence.restoreElectoralDistrict(modelElectoralDistrict);
     }
     
@@ -240,7 +234,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @param electoralDistrict the object to be persisted
      * @throws EVException in case there was an error while persisting the object
      */
-    public void storeElectoralDistrict( ElectoralDistrictImpl electoralDistrict ) throws EVException {
+    public void storeElectoralDistrict( ElectoralDistrict electoralDistrict ) throws EVException {
         persistence.storeElectoralDistrict(electoralDistrict);
     }
     
@@ -249,7 +243,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @param electoralDistrict the object to be deleted.
      * @throws EVException in case there is a problem with the deletion of the object
      */
-    public void deleteElectoralDistrict( ElectoralDistrictImpl electoralDistrict ) throws EVException {
+    public void deleteElectoralDistrict( ElectoralDistrict electoralDistrict ) throws EVException {
         persistence.deleteElectoralDistrict(electoralDistrict);
     }
 
@@ -262,8 +256,8 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new Ballot object instance with the given attribute values
      * @throws EVException in case any of the arguments are null or if the electoralDistrict is not persistent
      */
-    public BallotImpl createBallot( Date openDate, Date closeDate, boolean approved, ElectoralDistrictImpl electoralDistrict ) throws EVException {
-        BallotImpl ballot = new BallotImpl(openDate, closeDate, approved, electoralDistrict);
+    public Ballot createBallot( Date openDate, Date closeDate, boolean approved, ElectoralDistrict electoralDistrict ) throws EVException {
+        Ballot ballot = new Ballot(openDate, closeDate, approved, electoralDistrict);
         persistence.setBallot(ballot);
         return ballot;
     }
@@ -272,8 +266,8 @@ public class ObjectLayerImpl implements ObjectLayer
      * Create a new Ballot object with undefined attribute values.
      * @return a new Ballot object instance
      */
-    public BallotImpl createBallot() {
-        BallotImpl ballot = new BallotImpl(null, null, false, null);
+    public Ballot createBallot() {
+        Ballot ballot = new Ballot(null, null, false, null);
         ballot.setId(-1);
         persistence.setBallot(ballot);
         return ballot;
@@ -285,7 +279,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a List of the located Ballot objects
      * @throws EVException in case there is a problem with the retrieval of the requested objects
      */
-    public List<BallotImpl> findBallot( BallotImpl modelBallot ) throws EVException {
+    public List<Ballot> findBallot( Ballot modelBallot ) throws EVException {
         return persistence.restoreBallot(modelBallot);
     }
     
@@ -294,7 +288,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @param ballot the object to be persisted
      * @throws EVException in case there was an error while persisting the object
      */
-    public void storeBallot( BallotImpl ballot ) throws EVException {
+    public void storeBallot( Ballot ballot ) throws EVException {
         persistence.storeBallot(ballot);
     }
     
@@ -303,7 +297,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @param ballot the object to be deleted.
      * @throws EVException in case there is a problem with the deletion of the object
      */
-    public void deleteBallot( BallotImpl ballot ) throws EVException {
+    public void deleteBallot( Ballot ballot ) throws EVException {
         persistence.deleteBallot(ballot);
     }
 
@@ -315,8 +309,8 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new Candidate object instance with the given attribute values
      * @throws EVException in case either the name or the politicalParty are null
      */
-    public CandidateImpl createCandidate( String name, PoliticalPartyImpl politicalParty, ElectionImpl election ) throws EVException {
-        CandidateImpl candidate = new CandidateImpl(name, politicalParty, election);
+    public Candidate createCandidate( String name, PoliticalParty politicalParty, Election election ) throws EVException {
+        Candidate candidate = new Candidate(name, politicalParty, election);
         persistence.setCandidate(candidate);
         return candidate;
     }
@@ -326,7 +320,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new Candidate object instance
      */
     public CandidateImpl createCandidate() {
-        CandidateImpl candidate = new CandidateImpl(null, null, null);
+        Candidate candidate = new Candidate(null, null, null);
         candidate.setId(-1);
         persistence.setCandidate(candidate);
         return candidate;
@@ -338,7 +332,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a List of the located Candidate objects
      * @throws EVException in case there is a problem with the retrieval of the requested objects
      */
-    public List<CandidateImpl> findCandidate( CandidateImpl modelCandidate ) throws EVException {
+    public List<Candidate> findCandidate( Candidate modelCandidate ) throws EVException {
         return persistence.restoreCandidate(modelCandidate);
     }
     
@@ -347,7 +341,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @param candidate the object to be persisted
      * @throws EVException in case there was an error while persisting the object
      */
-    public void storeCandidate( CandidateImpl candidate ) throws EVException {
+    public void storeCandidate( Candidate candidate ) throws EVException {
         persistence.storeCandidate(candidate);
     }
     
@@ -356,7 +350,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @param candidate the object to be deleted.
      * @throws EVException in case there is a problem with the deletion of the object
      */
-    public void deleteCandidate( CandidateImpl candidate ) throws EVException {
+    public void deleteCandidate( Candidate candidate ) throws EVException {
         persistence.deleteCandidate(candidate);
     }
 
@@ -366,8 +360,8 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new Issue object instance with the given attribute value
      * @throws EVException in case question is null
      */
-    public IssueImpl createIssue( String question ) throws EVException {
-        IssueImpl issue = new IssueImpl(question);
+    public Issue createIssue( String question ) throws EVException {
+        Issue issue = new Issue(question);
         persistence.setIssue(issue);
         return issue;
     }
@@ -376,8 +370,8 @@ public class ObjectLayerImpl implements ObjectLayer
      * Create a new Issue object with undefined attribute values.
      * @return a new Issue object instance
      */
-    public IssueImpl createIssue() {
-        IssueImpl issue = new IssueImpl(null);
+    public Issue createIssue() {
+        Issue issue = new Issue(null);
         issue.setId(-1);
         persistence.setIssue(issue);
         return issue;
@@ -389,7 +383,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a List of the located Issue objects
      * @throws EVException in case there is a problem with the retrieval of the requested objects
      */
-    public List<IssueImpl> findIssue( IssueImpl modelIssue ) throws EVException {
+    public List<Issue> findIssue( Issue modelIssue ) throws EVException {
         return persistence.restoreIssue(modelIssue);
     }
     
@@ -398,7 +392,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @param issue the object to be persisted
      * @throws EVException in case there was an error while persisting the object
      */
-    public void storeIssue( IssueImpl issue ) throws EVException {
+    public void storeIssue( Issue issue ) throws EVException {
         persistence.storeIssue(issue);
     }
     
@@ -407,7 +401,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @param issue the object to be deleted.
      * @throws EVException in case there is a problem with the deletion of the object
      */
-    public void deleteIssue( IssueImpl issue ) throws EVException {
+    public void deleteIssue( Issue issue ) throws EVException {
         persistence.deleteIssue(issue);
     }
 
@@ -418,8 +412,8 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new Election object instance with the given attribute value
      * @throws EVException in case question is null
      */
-    public ElectionImpl createElection( String office, boolean isPartisan ) throws EVException {
-        ElectionImpl election = new ElectionImpl(office, isPartisan);
+    public Election createElection( String office, boolean isPartisan ) throws EVException {
+        Election election = new Election(office, isPartisan);
         persistence.setElection(election);
         return election;
     }
@@ -428,8 +422,8 @@ public class ObjectLayerImpl implements ObjectLayer
      * Create a new Election object with undefined attribute values.
      * @return a new Election object instance
      */
-    public ElectionImpl createElection() {
-        ElectionImpl election = new ElectionImpl(null, false);
+    public Election createElection() {
+        Election election = new Election(null, false);
         election.setId(-1);
         persistence.setElection(election);
         return election;
@@ -441,7 +435,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a List of the located Election objects
      * @throws EVException in case there is a problem with the retrieval of the requested objects
      */
-    public List<ElectionImpl> findElection( ElectionImpl modelElection ) throws EVException {
+    public List<Election> findElection( Election modelElection ) throws EVException {
         return persistence.restoreElection(modelElection);
     }
     
@@ -450,7 +444,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @param election the object to be persisted
      * @throws EVException in case there was an error while persisting the object
      */
-    public void storeElection( ElectionImpl election ) throws EVException {
+    public void storeElection( Election election ) throws EVException {
         persistence.storeElection(election);
     }
     
@@ -459,7 +453,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @param election the object to be deleted.
      * @throws EVException in case there is a problem with the deletion of the object
      */
-    public void deleteElection( ElectionImpl election ) throws EVException {
+    public void deleteElection( Election election ) throws EVException {
         persistence.deleteElection(election);
     }
     
@@ -471,8 +465,8 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new VoteRecord object instance with the given attribute value
      * @throws EVException in case either of the arguments is null
      */
-    public VoteRecordImpl createVoteRecord( BallotImpl ballot, VoterImpl voter, Date date ) throws EVException {
-        VoteRecordImpl voteRecord = new VoteRecordImpl(ballot, voter, date);
+    public VoteRecord createVoteRecord( Ballot ballot, Voter voter, Date date ) throws EVException {
+        VoteRecord voteRecord = new VoteRecord(ballot, voter, date);
         persistence.setVoteRecord(voteRecord);
         return voteRecord;
     }
@@ -481,8 +475,8 @@ public class ObjectLayerImpl implements ObjectLayer
      * Create a new VoteRecord object with undefined attribute values.
      * @return a new VoteRecord object instance
      */
-    public VoteRecordImpl createVoteRecord() {
-        VoteRecordImpl voteRecord = new VoteRecordImpl(null, null, null);
+    public VoteRecord createVoteRecord() {
+        VoteRecord voteRecord = new VoteRecord(null, null, null);
         voteRecord.setId(-1);
         persistence.setVoteRecord(voteRecord);
         return voteRecord;
@@ -494,7 +488,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a List of the located VoteRecord objects
      * @throws EVException in case there is a problem with the retrieval of the requested objects
      */
-    public List<VoteRecordImpl> findVoteRecord( VoteRecordImpl modelVoteRecord ) throws EVException {
+    public List<VoteRecord> findVoteRecord( VoteRecord modelVoteRecord ) throws EVException {
         return persistence.restoreVoteRecord(modelVoteRecord);
     }
     
@@ -503,7 +497,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @param voteRecord the object to be persisted
      * @throws EVException in case there was an error while persisting the object
      */
-    public void storeVoteRecord( VoteRecordImpl voteRecord ) throws EVException {
+    public void storeVoteRecord( VoteRecord voteRecord ) throws EVException {
         persistence.storeVoteRecord(voteRecord);
     }
     
@@ -512,7 +506,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @param voteRecord the object to be deleted.
      * @throws EVException in case there is a problem with the deletion of the object
      */
-    public void deleteVoteRecord( VoteRecordImpl voteRecord ) throws EVException {
+    public void deleteVoteRecord( VoteRecord voteRecord ) throws EVException {
         persistence.deleteVoteRecord(voteRecord);
     }
 }
