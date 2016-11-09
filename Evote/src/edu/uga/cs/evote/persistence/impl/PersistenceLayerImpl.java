@@ -39,8 +39,46 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	@Override
 	public List<ElectionsOfficer> restoreElectionsOfficer(ElectionsOfficer modelElectionsOfficer) throws EVException {
 		// TODO Auto-generated method stub
-		return null;
-	}
+	String       sqlQuery = "SELECT EOName, userID FROM electionsOfficer";
+        Statement    stmt = null;
+        StringBuffer query = new StringBuffer( 100 );
+        StringBuffer condition = new StringBuffer( 100 );
+        List<ElectionsOfficer>   electionsOfficers = new ArrayList<ElectionsOfficer>();
+	
+        condition.setLength( 0 );
+         query.append( sqlQuery );
+        if( modelElectionsOfficer != null ) {
+            if( modelElectionsOfficer.getEOName() != null ) // id is unique, so it is sufficient to get a person
+                query.append( " where EOName = " + modelElectionsOfficer.getEOName() );
+           
+        }
+        
+        try {
+            stmt = conn.createStatement();
+	if( stmt.execute( query.toString() ) ) {
+		    String EOName;
+		    String userID;
+		    ElectionsOfficer nextElectionsOfficer = null;
+
+		    ResultSet rs = stmt.getResultSet();
+
+		    // retrieve the retrieved clubs
+		    while( rs.next() ) {
+			EOName = rs.getString(1);
+			userID = rs.getString(2);
+
+			nextElectionsOfficer.setEOName(EOName);
+			nextElectionsOfficer.setUserID(userID);
+
+			electionsOfficers.add(nextElectionsOfficer);
+		    }
+		}
+        }
+        catch( Exception e ) {      // just in case...
+            throw new EVException( "ClubManager.restore: Could not restore persistent Club objects; Root cause: " + e );
+        }
+        
+		return electionDistricts;	}
 
 	@Override
 	public void storeElectionsOfficer(ElectionsOfficer electionsOfficer) throws EVException {
