@@ -1417,10 +1417,54 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	@Override
 	public void storeElectoralDistrictHasBallotBallot(ElectoralDistrict electoralDistrict, Ballot ballot)
 			throws EVException {
-		// TODO Auto-generated method stub
-		storeElectoralDistrict(electoralDistrict);
-		storeBallot(ballot);
+
+		String               updateCandidateSql = "UPDATE ballot "
+				+ "SET zip = ? "
+				+ "WHERE ballotID = ?";
+		
+		PreparedStatement    stmt = null;
+        int                  inscnt;
+        long                 membershipId;
+        
+        if( candidate.isPersistent())
+            throw new EVException( "PersistenceLayer.save: Attempting to update an ballot that isn't persistent" );
+                              
+        try {
+            stmt = (PreparedStatement) conn.prepareStatement( updateCandidateSql );
+            
+            stmt.setString( 1, electoralDistrict.getZip() );
+            stmt.setString( 2, ballot.getBallotID() );
+            
+            inscnt = stmt.executeUpdate();
+            
+            if( inscnt >= 1 ) {
+                String sql = "select last_insert_id()";
+                if( stmt.execute( sql ) ) { // statement returned a result
+
+                    // retrieve the result
+                    ResultSet r = stmt.getResultSet();
+
+                    // we will use only the first row!
+                    //
+                    while( r.next() ) {
+
+                        // retrieve the last insert auto_increment value
+                        membershipId = r.getLong( 1 );
+                        if( membershipId > 0 )
+                        	voteRecord.setId( membershipId ); // set this membership's db id (proxy object)
+                    }
+                }
+            }
+            else
+                throw new EVException( "PersistenceLayer.save: failed to update a ballot" );
+        }
+        catch( SQLException e ) {
+            e.printStackTrace();
+            throw new EVException( "PersistenceLayer.save: failed to update a ballot: " + e );
+        }
+
 	}
+
 
 	@Override
 	public ElectoralDistrict restoreElectoralDistrictHasBallotBallot(Ballot ballot) throws EVException {
