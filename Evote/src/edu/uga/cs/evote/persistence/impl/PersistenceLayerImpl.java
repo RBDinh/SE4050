@@ -1601,9 +1601,53 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	public void storeCandidateIsMemberOfPoliticalParty(Candidate candidate, PoliticalParty politicalParty)
 			throws EVException {
 		// TODO Auto-generated method stub
-		storeCandidate(candidate);
-		storePoliticalParty(politicalParty);
+		String               updateCandidateSql = "UPDATE candidate "
+				+ "SET partyID = ? "
+				+ "WHERE title = ?";
+		
+		PreparedStatement    stmt = null;
+        int                  inscnt;
+        long                 membershipId;
+        
+        if( candidate.isPersistent())
+            throw new EVException( "PersistenceLayer.save: Attempting to update a candidate that isn't persistent" );
+                              
+        try {
+            stmt = (PreparedStatement) conn.prepareStatement( updateCandidateSql );
+            
+            stmt.setString( 1, politicalParty.getPartyID() );
+            stmt.setString( 2, candidate.getTitle() );
+            
+            inscnt = stmt.executeUpdate();
+            
+            if( inscnt >= 1 ) {
+                String sql = "select last_insert_id()";
+                if( stmt.execute( sql ) ) { // statement returned a result
+
+                    // retrieve the result
+                    ResultSet r = stmt.getResultSet();
+
+                    // we will use only the first row!
+                    //
+                    while( r.next() ) {
+
+                        // retrieve the last insert auto_increment value
+                        membershipId = r.getLong( 1 );
+                        if( membershipId > 0 )
+                        	voteRecord.setId( membershipId ); // set this membership's db id (proxy object)
+                    }
+                }
+            }
+            else
+                throw new EVException( "PersistenceLayer.save: failed to update a candidate" );
+        }
+        catch( SQLException e ) {
+            e.printStackTrace();
+            throw new EVException( "PersistenceLayer.save: failed to update a candidate: " + e );
+        }
+
 	}
+
 
 	@Override
 	public PoliticalParty restoreCandidateIsMemberOfPoliticalParty(Candidate candidate) throws EVException {
