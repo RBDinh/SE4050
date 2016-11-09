@@ -6,6 +6,8 @@ import edu.uga.cs.evote.persistence.Persistable;
 public interface BallotItem 
     extends Persistable
 {
+	
+	
     /** Return the vote count of this BallotItem.
      * @return the vote count of this BallotItem
      */
@@ -32,4 +34,6 @@ public interface BallotItem
      * @throws EVException in case there is a problem with setting a link to the requested object
      */
     public void setBallot( Ballot ballot ) throws EVException;
+
+	public String getBallotID();
 }

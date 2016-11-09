@@ -11,12 +11,12 @@ public interface Ballot extends Persistable
 	/** Return the ID for this Ballot
      * @return the ID for this Ballot
      */
-    public long getBallotID();
+	public String getBallotID();
     
     /** Set the new ID for this Ballot
      * @param ID the new ballot ID
      */
-    public void setBallotID( long ballotID );
+    public void setBallotID( String ballotID );
     
 	/** Return the zip for this Ballot
      * @return the zip for this Ballot
@@ -103,5 +103,6 @@ public interface Ballot extends Persistable
      * @throws EVException in case there is a problem with traversing links to the requested objects
      */
     public List<VoteRecord> getVoterVoteRecords() throws EVException;
+
 
 }
