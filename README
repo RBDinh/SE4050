@@ -1,0 +1,30 @@
+Hi, welcome to our election evote app.
+
+Group 3
+Group Members:
+ - Randy Dinh
+ - Scott Lee
+ - Fizah Chowdhury
+ - Grayson Holt
+
+
+To run our code:
+(1) Open 'MySQL'. Create a database called 'erd2'.
+(2) Then, with the database selected, run the included SQL code 'populate.sql'. This will populate your database with the right tables.
+(3) Next, you will need to go into the java file 'DbAccessConfig'. In here you'll set up your credentials to access your MySQL database.
+(4) Now simply run the main method of the 'WriteTest' class in the package 'edu.uga.cs.evote.test'. This will demonstrate a sample run of our code, and will populate the database you set up earlier.
+
+
+What we implemented:
+(1) Create 2 election officers
+(2) Create an electoral district
+(3) Create 2 voters so they belong to the district
+(4) Create 2 political parties
+(5) Create 2 ballots
+(6) Create 3 issues
+(7) Create 3 elections, one of each being partisan.
+(8) Create 3 candidates for every election (18 total)
+
+What we didn't implement:
+(1) Creating the data to represent the voting of the 2 voters
+(2) Cleanly deleting all the test data. However, to destroy all the data, simply drop the database and start at step one again!
