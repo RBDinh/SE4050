@@ -43,6 +43,10 @@ public interface VoteRecord extends Persistable
      * @param ballot the new ballot on which the vote has been cast
      * @throws EVException in case there is a problem with setting a link to the argument object
      */
-    public void setBallot( Ballot ballot ) throws EVException; 
+    public void setBallot( Ballot ballot ) throws EVException;
+
+	public void setVoterID(String voterID);
+
+	public void setBallotID(String ballotID); 
 
 }

@@ -22,11 +22,12 @@ public class BallotItemImpl extends Persistent implements BallotItem {
 		ballot = null;
 	}
 	
-	public BallotItemImpl(int voteCount, Ballot ballot)
+	public BallotItemImpl(String itemID, String ballotID, int voteCount)
 	{
 		super(-1);
+		this.itemID = itemID;
+		this.ballotID = ballotID;
 		this.voteCount = voteCount;
-		this.ballot = ballot;
 	}
 
 	public String getItemID() {
@@ -65,8 +66,6 @@ public class BallotItemImpl extends Persistent implements BallotItem {
 	public Ballot getBallot() throws EVException {
 		if(ballot == null){
 				ballot = getPersistencaLayer().restoreBallotIncludesBallotItem(this);
-				throw new EVException( "This ballot object is not persistent" );
-			
 		}
 			return ballot;
 	}

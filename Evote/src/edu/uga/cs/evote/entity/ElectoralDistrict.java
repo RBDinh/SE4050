@@ -48,4 +48,6 @@ public interface ElectoralDistrict
      * @throws EVException in case there is a problem with deleting a link to the requested objects
      */
     public void deleteBallot( Ballot ballot ) throws EVException;
+
+	public void setDistrictName(String districtName);
 }

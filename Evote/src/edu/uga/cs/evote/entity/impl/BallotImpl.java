@@ -18,7 +18,8 @@ implements Ballot {
 	String ballotID;
 	String zip;
 	String EOName;
-	String name;
+	String bName;
+	String approved;
 	Date openDate;
 	Date closeDate;
 	ElectoralDistrict ED;
@@ -31,7 +32,7 @@ implements Ballot {
 		ballotID = null;
 		zip = null;
 		EOName = null;
-		name = null;
+		bName = null;
 		openDate = null;
 		closeDate = null;
 		ED = null;
@@ -39,24 +40,17 @@ implements Ballot {
 		voteRecord = null;
 	}
 	
-	public BallotImpl(String ballotID,	String zip,
-			String EOName,
-			String name,
-			Date openDate,
-			Date closeDate,
-			ElectoralDistrict ED,
-			List<BallotItem> ballotItems,
-			List<VoteRecord> voteRecord )
+	public BallotImpl(String ballotID, String zip, String EOName, String bName, String approved)
 	{
 		this.ballotID = ballotID;
 		this.zip = zip;
 		this.EOName = EOName;
-		this.name = name;
-		this.openDate = openDate;
-		this.closeDate = closeDate;
-		this.ED = ED;
-		this.ballotItems = ballotItems;
-		this.voteRecord = voteRecord;
+		this.bName = bName;
+		this.approved = approved;
+	}
+
+	public void setApproved(String approved) {
+		this.approved = approved;
 	}
 
 	//methods
@@ -97,13 +91,13 @@ implements Ballot {
 	}
 
 	@Override
-	public String getName() {
-		return name;
+	public String getBName() {
+		return bName;
 	}
 
 	@Override
-	public void setName(String Name) {
-		this.name = Name;
+	public void setBName(String Name) {
+		this.bName = Name;
 	}
 
 	@Override
@@ -154,6 +148,18 @@ implements Ballot {
 	@Override
 	public List<VoteRecord> getVoterVoteRecords() throws EVException {
 		return voteRecord;
+	}
+
+	@Override
+	public String getbName() {
+		// TODO Auto-generated method stub
+		return bName;
+	}
+
+	@Override
+	public String getApproved() {
+		// TODO Auto-generated method stub
+		return approved;
 	}
 	
 

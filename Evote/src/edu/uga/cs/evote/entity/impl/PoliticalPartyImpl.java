@@ -13,16 +13,26 @@ implements PoliticalParty {
 	
 	//attributes
 	String partyID;
-	String name;
+	String partyName;
 	String color;
 	List<Candidate> candidates;
 	
 	//constructors
+	public PoliticalPartyImpl(String partyID, String partyName, String color)
+	{
+		this.partyID = partyID;
+		this.partyName = partyName;
+		this.color = color;
+	}
+	
 	public PoliticalPartyImpl()
 	{
-		name = null;
+		color = null;
+		partyID = null;
+		partyName = null;
 		candidates = null;
 	}
+	
 	
 	@Override
 	public String getPartyID() {
@@ -36,12 +46,12 @@ implements PoliticalParty {
 	
 	@Override
 	public String getName() {
-		return name;
+		return partyName;
 	}
 
 	@Override
 	public void setName(String name) {
-		this.name = name;
+		this.partyName = name;
 	}
 	
 	@Override
@@ -59,4 +69,14 @@ implements PoliticalParty {
 		return candidates;
 	}
 
+	@Override
+	public void setPartyName(String partyName) {
+		// TODO Auto-generated method stub
+		this.partyName = partyName;
+	}
+
+	public String getPartyName(){
+		
+		return partyName;
+	}
 }

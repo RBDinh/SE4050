@@ -5,6 +5,7 @@ import java.util.List;
 
 import edu.uga.cs.evote.EVException;
 import edu.uga.cs.evote.entity.Ballot;
+import edu.uga.cs.evote.entity.BallotItem;
 import edu.uga.cs.evote.entity.Candidate;
 import edu.uga.cs.evote.entity.Election;
 import edu.uga.cs.evote.entity.ElectionsOfficer;
@@ -13,6 +14,7 @@ import edu.uga.cs.evote.entity.Issue;
 import edu.uga.cs.evote.entity.PoliticalParty;
 import edu.uga.cs.evote.entity.VoteRecord;
 import edu.uga.cs.evote.entity.Voter;
+import edu.uga.cs.evote.persistence.PersistenceLayer;
 
 
 
@@ -76,8 +78,7 @@ public interface ObjectLayer
      * @return a new ElectionsOfficer object instance with the given attribute values
      * @throws EVException in case either firstName, lastName, or userName is null
      */
-    public ElectionsOfficer createElectionsOfficer( String firstName, String lastName, String userName, 
-                                                    String password, String emailAddress, String address ) throws EVException;
+	public ElectionsOfficer createElectionsOfficer( String EOName, String userID) throws EVException;
 
     /**
      * Create a new ElectionsOfficer object with undefined attribute values.
@@ -119,8 +120,7 @@ public interface ObjectLayer
      * @return a new Voter object instance with the given attribute values
      * @throws EVException in case any of the String parameters is null or if age is not positive
      */
-    public Voter createVoter( String firstName, String lastName, String userName, String password, 
-            String emailAddress, String address, int age ) throws EVException;
+    public Voter createVoter( String voterName, int age, String zip, String userID) throws EVException;
 
     /**
      * Create a new Voter object with undefined attribute values.
@@ -156,7 +156,7 @@ public interface ObjectLayer
      * @return a new PoliticalParty object instance with the given attribute values
      * @throws EVException in case name is null
      */
-    public PoliticalParty createPoliticalParty( String name ) throws EVException;
+    public PoliticalParty createPoliticalParty( String partyID, String partyName, String color ) throws EVException;
 
     /**
      * Create a new PoliticalParty object with undefined attribute values.
@@ -231,7 +231,7 @@ public interface ObjectLayer
      * @return a new Ballot object instance with the given attribute values
      * @throws EVException in case any of the arguments are null or if the electoralDistrict is not persistent
      */
-    public Ballot createBallot( Date openDate, Date closeDate, boolean approved, ElectoralDistrict electoralDistrict ) throws EVException;
+    public Ballot createBallot(String ballotID, String zip, String EOName, String bName, String approved) throws EVException;
 
     /**
      * Create a new Ballot object with undefined attribute values.
@@ -269,7 +269,7 @@ public interface ObjectLayer
      * @return a new Candidate object instance with the given attribute values
      * @throws EVException in case either the name or the politicalParty are null
      */
-    public Candidate createCandidate( String name, PoliticalParty politicalParty, Election election ) throws EVException;
+    public Candidate createCandidate( String choiceID, String electionName, String partyID, String title, int voteCount, String description ) throws EVException;
 
     /**
      * Create a new Candidate object with undefined attribute values.
@@ -305,7 +305,7 @@ public interface ObjectLayer
      * @return a new Issue object instance with the given attribute value
      * @throws EVException in case question is null
      */
-    public Issue createIssue( String question ) throws EVException;
+    public Issue createIssue( String issueID, String itemID, String questionTitle, String description, int yesCount, int noCount ) throws EVException;
 
     /**
      * Create a new Issue object with undefined attribute values.
@@ -342,7 +342,7 @@ public interface ObjectLayer
      * @return a new Election object instance with the given attribute value
      * @throws EVException in case question is null
      */
-    public Election createElection( String office, boolean isPartisan ) throws EVException;
+    public Election createElection( String electionName, String itemID, Long startDate, Long endDate, String isPartisan ) throws EVException;
 
     /**
      * Create a new Election object with undefined attribute values.
@@ -408,5 +408,13 @@ public interface ObjectLayer
      * @param voteRecord the object to be deleted.
      * @throws EVException in case there is a problem with the deletion of the object
      */
-    public void deleteVoteRecord( VoteRecord voteRecord ) throws EVException; 
+    public void deleteVoteRecord( VoteRecord voteRecord ) throws EVException;
+
+	public void setPersistence(PersistenceLayer persistence);
+
+	public ElectoralDistrict createElectoralDistrict(String string, String string2) throws EVException; 
+	
+	public BallotItem createBallotItem(String itemID, String ballotID, int voteCount) throws EVException;
+	
+	 public void storeBallotItem( BallotItem ballotItem ) throws EVException;
 }

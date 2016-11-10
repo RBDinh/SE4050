@@ -29,15 +29,15 @@ public abstract class DbAccessConfig
 
     /** The JDBC connection string/URL.
      */
-    static final String DB_CONNECTION_URL = "jdbc:mysql://localhost:3306/evote";
+    static final String DB_CONNECTION_URL = "jdbc:mysql://localhost:3306/erd2";
 
     /** The database user name.
      */
-    static  String DB_CONNECTION_USERNAME = "demo";
+    static  String DB_CONNECTION_USERNAME = "root";
 
     /** The password for the database user.
      */
-    static  String DB_CONNECTION_PWD = "demo";
+    static  String DB_CONNECTION_PWD = "waldowashere";
 
 }
 

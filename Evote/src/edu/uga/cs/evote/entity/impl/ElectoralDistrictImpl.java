@@ -13,7 +13,7 @@ extends Persistent
 implements ElectoralDistrict {
 
 	//attributes
-	String name;
+	String districtName;
 	String zip;
 	List<Voter> voters;
 	List<Ballot> ballots;
@@ -21,32 +21,26 @@ implements ElectoralDistrict {
 	//constructors
 	public ElectoralDistrictImpl()
 	{
-		name = null;
+		districtName = null;
 		zip = null;
-		voters = null;
-		ballots = null;
+
 	}
 	
-	public ElectoralDistrictImpl(
-			String name,
-			String zip,
-			List<Voter> voters,
-			List<Ballot> ballots)
+	public ElectoralDistrictImpl(String zip, String districtName)
 	{
-		this.name = name;
+		this.districtName = districtName;
 		this.zip = zip;
-		this.voters = voters;
-		this.ballots = ballots;
+	
 	}
 	
 	@Override
 	public String getName() {
-		return name;
+		return districtName;
 	}
 
 	@Override
 	public void setName(String name) {
-		this.name = name;
+		this.districtName = name;
 	}
 	
 	@Override
@@ -77,6 +71,12 @@ implements ElectoralDistrict {
 	@Override
 	public void deleteBallot(Ballot ballot) throws EVException {
 		ballots.remove(ballot);
+	}
+
+	@Override
+	public void setDistrictName(String districtName) {
+		// TODO Auto-generated method stub
+		this.districtName = districtName;
 	}
 
 }

@@ -10,29 +10,40 @@ public class CandidateImpl extends Persistent implements Candidate {
 
 	//attributes
 	String choiceID;
-	String name;
+	String electionName;
 	int voteCount;
+	String title;
 	Election election = null;
 	PoliticalParty politicalParty = null;
 	String description;
+	String partyID;
 	
 	//constructors
 	public CandidateImpl()
 	{
 		super(-1);
 		choiceID = null;
-		name = null;
+		electionName = null;
 		voteCount = -1;
 	}
 	
-	public CandidateImpl(String choiceID, String name, int voteCount, Election election, PoliticalParty politicalParty)
+	public CandidateImpl(String choiceID, String electionName, String partyID, String title, int voteCount, String description)
 	{
 		super(-1);
 		this.choiceID = choiceID;
-		this.name = name;
+		this.electionName = electionName;
 		this.voteCount = voteCount;
-		this.election = election;
-		this.politicalParty = politicalParty;
+		this.partyID = partyID;
+		this.title = title;
+		this.description = description;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setPartyID(String partyID) {
+		this.partyID = partyID;
 	}
 
 	@Override
@@ -47,12 +58,12 @@ public class CandidateImpl extends Persistent implements Candidate {
 	
 	@Override	
 	public String getName() {
-		return name;
+		return electionName;
 	}
 
 	@Override
 	public void setName(String name) {
-		this.name = name;
+		this.electionName = name;
 	}
 
 	@Override
@@ -96,6 +107,36 @@ public class CandidateImpl extends Persistent implements Candidate {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@Override
+	public void setElectionName(String electionName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setpartyID(String partyID) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setTitle(String title) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getElectionName() {
+		// TODO Auto-generated method stub
+		return electionName;
+	}
+
+	@Override
+	public String getPartyID() {
+		// TODO Auto-generated method stub
+		return partyID;
 	}
 
 }

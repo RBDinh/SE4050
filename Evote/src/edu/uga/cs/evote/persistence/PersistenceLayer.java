@@ -450,4 +450,11 @@ public interface PersistenceLayer
      * @throws EVException in case an error occurred during the delete operation 
      */
     public void deleteVoterBelongsToElection( Voter voter, ElectoralDistrict electoralDistrict ) throws EVException;
+
+	public Ballot restoreBallotIncludesBallotItem(VoteRecord voteRecordImpl) throws EVException;
+
+	public void restoreBallotItemIncludesIssue(Issue issueImpl) throws EVException;
+
+	public void storeBallotItem(BallotItem ballotItem) throws EVException;
+
 }

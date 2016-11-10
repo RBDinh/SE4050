@@ -67,4 +67,14 @@ public interface Candidate extends Persistable
 	public String getDescription();
 
 	public void setDescription(String description);
+
+	public void setElectionName(String electionName);
+
+	public void setpartyID(String partyID);
+
+	public void setTitle(String title);
+
+	public String getElectionName();
+
+	public String getPartyID();
 }

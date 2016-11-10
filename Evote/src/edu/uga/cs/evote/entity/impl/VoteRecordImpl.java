@@ -106,4 +106,10 @@ implements VoteRecord {
 		this.ballot = ballot;
 	}
 
+	@Override
+	public void setVoterID(String voterID) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -16,6 +16,8 @@ import edu.uga.cs.evote.persistence.PersistenceLayer;
 import edu.uga.cs.evote.EVException;
 import edu.uga.cs.evote.entity.Ballot;
 import edu.uga.cs.evote.entity.BallotItem;
+import edu.uga.cs.evote.entity.impl.BallotItemImpl;
+import edu.uga.cs.evote.entity.impl.ElectionImpl;
 import edu.uga.cs.evote.entity.Candidate;
 import edu.uga.cs.evote.entity.Election;
 import edu.uga.cs.evote.entity.ElectionsOfficer;
@@ -78,27 +80,36 @@ public class PersistenceLayerImpl implements PersistenceLayer {
             throw new EVException( "ClubManager.restore: Could not restore persistent Club objects; Root cause: " + e );
         }
         
-		return electionDistricts;	}
+		return electionsOfficers;	}
 
 	@Override
 	public void storeElectionsOfficer(ElectionsOfficer electionsOfficer) throws EVException {
 		// TODO Auto-generated method stub
-		 String               insertMembershipSql = "INSERT INTO electionOfficer (EOName, userID) VALUES ( ?, ? )";              
+		 String               insertMembershipSql = "INSERT INTO electionOfficer (EOName, userID) VALUES ( ?, ? )";  
+		 String               updateMembershipSql = "UPDATE electionOfficer SET userID = ? WHERE EOName = ?";
 	        PreparedStatement    stmt = null;
 	        int                  inscnt;
 	        long                 membershipId;
 	        
-	        if( electionsOfficer.getEOName() == null || electionsOfficer.getuserID() == null )
+	        if( electionsOfficer.getEOName() == null )
 	            throw new EVException( "MembershipManager.save: Attempting to save a Membership with no Person or Club defined" );
-	        if( !electionsOfficer.getEOName().isPersistent() || !electionsOfficer.getuserID().isPersistent() )
-	            throw new EVException( "MembershipManager.save: Attempting to save a Membership where either Person or Club are not persistent" );
+	        //if( !electionsOfficer.isPersistent() )
+	            //throw new EVException( "MembershipManager.save: Attempting to save a Membership where either Person or Club are not persistent" );
 	                              
 	        try {
-	            stmt = (PreparedStatement) conn.prepareStatement( insertMembershipSql );
-	            
-	            stmt.setLong( 1, electionsOfficer.getEOName().getId() );
-	            stmt.setLong( 2, electionsOfficer.getuserID().getId() );
-	            
+	        	if( !electionsOfficer.isPersistent() ){
+		            stmt = (PreparedStatement) conn.prepareStatement( insertMembershipSql );
+		            
+		            stmt.setString( 1, electionsOfficer.getEOName() );
+		            stmt.setString( 2, electionsOfficer.getUserID() );
+	        	}
+	        	
+	        	else if( electionsOfficer.isPersistent() ){
+	        		stmt = (PreparedStatement) conn.prepareStatement( updateMembershipSql );
+		            
+	        		stmt.setString( 1, electionsOfficer.getUserID() );
+		            stmt.setString( 2, electionsOfficer.getEOName() );
+	        	}
 	            inscnt = stmt.executeUpdate();
 	            
 	            if( inscnt >= 1 ) {
@@ -166,7 +177,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         condition.setLength( 0 );
          query.append( sqlQuery );
         if( modelVoter != null ) {
-            if( modelVoter.getVoterName() >= 0 ) // id is unique, so it is sufficient to get a person
+            if( modelVoter.getVoterName() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where voterName = " + modelVoter.getVoterName() );
            
         }
@@ -214,18 +225,18 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         int                  inscnt;
         long                 membershipId;
         
-        if( voter.getVoterName() == null || voter.getAge() == null || voter.getZip() == null || voter.getUserID() == null)
+        if( voter.getVoterName() == null )
             throw new EVException( "MembershipManager.save: Attempting to save a Membership with no Person or Club defined" );
-        if( !voter.getVoterName().isPersistent() || !voter.getAge().isPersistent() || !voter.getZip().isPersistent() || !voter.getUserID().isPersistent())
-            throw new EVException( "MembershipManager.save: Attempting to save a Membership where either Person or Club are not persistent" );
+        //if( !voter.isPersistent() )
+           // throw new EVException( "MembershipManager.save: Attempting to save a Membership where either Person or Club are not persistent" );
                               
         try {
             stmt = (PreparedStatement) conn.prepareStatement( insertMembershipSql );
             
-            stmt.setLong( 1, voter.getVoterName() );
+            stmt.setString( 1, voter.getVoterName() );
             stmt.setLong( 2, voter.getAge() );
-            stmt.setLong( 3, voter.getZip() );
-            stmt.setLong( 4, voter.getUserID() );
+            stmt.setString( 3, voter.getZip() );
+            stmt.setString( 4, voter.getUserID() );
             
             inscnt = stmt.executeUpdate();
             
@@ -294,14 +305,14 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	        condition.setLength( 0 );
 	         query.append( sqlQuery );
 	        if( modelBallot != null ) {
-	            if( modelBallot.getBallotID() >= 0 ) // id is unique, so it is sufficient to get a person
-	                query.append( " where ballotID = " + modelBallot.getBallotID() );
+	           // if( modelBallot.getBallotID() != null ) // id is unique, so it is sufficient to get a person
+	              //  query.append( " where ballotID = " + modelBallot.getBallotID() );
 	           
 	        }
 	        
 	        try {
                 stmt = conn.createStatement();
-                long ballotID;
+                String ballotID;
             	String zip;
             	String EOName;
             	String name;
@@ -314,7 +325,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 
 			// retrieve the retrieved clubs
 			while( rs.next() ) {
-				ballotID = rs.getLong( 1 );
+				ballotID = rs.getString( 1 );
 				zip = rs.getString( 2 );
 				EOName = rs.getString( 3 );
 				name = rs.getString( 4 );
@@ -325,7 +336,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 				nextBallot.setBallotID(ballotID);
 				nextBallot.setZip(zip);
 				nextBallot.setEOName(EOName);
-				nextBallot.setName(name);
+				nextBallot.setBName(name);
 				nextBallot.setOpenDate(openDate);
 				nextBallot.setCloseDate(closeDate);
 
@@ -349,19 +360,19 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         int                  inscnt;
         long                 membershipId;
         
-        if( ballot.getBallotID() == null || ballot.getZip() == null || ballot.getEOName() == null || ballot.getbName() == null, || ballot.getApproved() == null)
+        if( ballot.getBallotID() == null )
             throw new EVException( "MembershipManager.save: Attempting to save a Membership with no Person or Club defined" );
-        if( !ballot.getBallotID().isPersistent() || !ballot.getZip().isPersistent() || !ballot.getEOName().isPersistent() || !ballot.getbName().isPersistent() || !ballot.getApproved().isPersistent())
-            throw new EVException( "MembershipManager.save: Attempting to save a Membership where either Person or Club are not persistent" );
+        //if( !ballot.isPersistent() )
+            //throw new EVException( "MembershipManager.save: Attempting to save a Membership where either Person or Club are not persistent" );
                               
         try {
             stmt = (PreparedStatement) conn.prepareStatement( insertMembershipSql );
             
-            stmt.setLong( 1, ballot.getBallotID() );
+            stmt.setString( 1, ballot.getBallotID() );
             stmt.setNString( 2, ballot.getZip() );
             stmt.setNString( 3, ballot.getEOName() );
-            stmt.setLong( 4, ballot.getbName() );
-            stmt.setLong( 5, ballot.getApproved() );
+            stmt.setString( 4, ballot.getbName() );
+            stmt.setString( 5, ballot.getApproved() );
 
             
             inscnt = stmt.executeUpdate();
@@ -488,17 +499,17 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         int                  inscnt;
         long                 membershipId;
         
-        if( candidate.getName() == null )
+        if( candidate.getChoiceID() == null )
             throw new EVException( "PersistenceLayer.save: Attempting to save a Ballot with no ballotId" );
-        if( candidate.isPersistent())
-            throw new EVException( "PersistenceLayer.save: Attempting to save a ballot that isn't persistent" );
+        //if( candidate.isPersistent())
+           // throw new EVException( "PersistenceLayer.save: Attempting to save a ballot that isn't persistent" );
                               
         try {
             stmt = (PreparedStatement) conn.prepareStatement( insertMembershipSql );
             
             stmt.setString( 1, candidate.getChoiceID() );
-            stmt.setLong( 2, candidate.getElection().getId() );
-            stmt.setLong( 3, candidate.getPoliticalParty().getId() );
+            stmt.setString( 2, candidate.getElectionName() );
+            stmt.setString( 3, candidate.getPartyID() );
             stmt.setString( 4, candidate.getName() );
             stmt.setInt( 5, candidate.getVoteCount() );
             stmt.setString( 6, candidate.getDescription() );
@@ -629,17 +640,17 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         
         if( election.getElectionName() == null )
             throw new EVException( "PersistenceLayer.save: Attempting to save a election with no name" );
-        if( election.isPersistent())
-            throw new EVException( "PersistenceLayer.save: Attempting to save an election that isn't persistent" );
+        //if( election.isPersistent())
+            //throw new EVException( "PersistenceLayer.save: Attempting to save an election that isn't persistent" );
                               
         try {
             stmt = (PreparedStatement) conn.prepareStatement( insertMembershipSql );
             
             stmt.setString( 1, election.getElectionName() );
-            stmt.setLong( 2, election.getId() );
-            stmt.setDate( 3, election.getStartDate() );
-            stmt.setDate( 4, election.getEndDate() );
-            stmt.setBoolean( 5, election.getIsPartisan() );
+            stmt.setString( 2, election.getItemID() );
+            stmt.setLong( 3, election.getStartDate() );
+            stmt.setLong( 4, election.getEndDate() );
+            stmt.setString( 5, election.getIsPartisan() );
 
             
             inscnt = stmt.executeUpdate();
@@ -762,7 +773,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
                               
         try {
             stmt = (PreparedStatement) conn.prepareStatement( insertMembershipSql );
-            
+            //System.out.println(electoralDistrict.getZip());
             stmt.setString( 1, electoralDistrict.getZip() );
             stmt.setString( 2, electoralDistrict.getName() );
 
@@ -885,7 +896,55 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	@Override
 	public void storeIssue(Issue issue) throws EVException {
 		// TODO Auto-generated method stub
+		String               insertMembershipSql = "INSERT INTO issue (issueID, itemID, questionTitle, description, yesCount, noCount) VALUES ( ?, ?, ?, ?, ?, ? )";              
+        PreparedStatement    stmt = null;
+        int                  inscnt;
+        long                 membershipId;
+        
+        if( issue.getIssueID() == null )
+            throw new EVException( "MembershipManager.save: Attempting to save a Membership with no Person or Club defined" );
+        //if( !ballot.isPersistent() )
+            //throw new EVException( "MembershipManager.save: Attempting to save a Membership where either Person or Club are not persistent" );
+                              
+        try {
+            stmt = (PreparedStatement) conn.prepareStatement( insertMembershipSql );
+            
+            stmt.setString( 1, issue.getIssueID() );
+            stmt.setString( 2, issue.getItemID() );
+            stmt.setString( 3, issue.getQuestion() );
+            stmt.setString( 4, issue.getDescription() );
+            stmt.setInt( 5, issue.getYesCount() );
+            stmt.setInt( 6, issue.getNoCount() );
 
+
+            
+            inscnt = stmt.executeUpdate();
+            
+            if( inscnt >= 1 ) {
+                String sql = "select last_insert_id()";
+                if( stmt.execute( sql ) ) { // statement returned a result
+
+                    // retrieve the result
+                    ResultSet r = stmt.getResultSet();
+
+                    // we will use only the first row!
+                    //
+                    while( r.next() ) {
+
+                        // retrieve the last insert auto_increment value
+                        membershipId = r.getLong( 1 );
+                        if( membershipId > 0 )
+                        	issue.setId( membershipId ); // set this membership's db id (proxy object)
+                    }
+                }
+            }
+            else
+                throw new EVException( "MembershipManager.save: failed to save a Membership" );
+        }
+        catch( SQLException e ) {
+            e.printStackTrace();
+            throw new EVException( "MembershipManager.save: failed to save a Membership: " + e );
+        }
 	}
 
 	@Override
@@ -965,7 +1024,50 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 	@Override
 	public void storePoliticalParty(PoliticalParty politicalParty) throws EVException {
 		// TODO Auto-generated method stub
+		String               insertMembershipSql = "INSERT INTO politicalParty (partyID, partyName, color) VALUES ( ?, ?, ? )";              
+        PreparedStatement    stmt = null;
+        int                  inscnt;
+        long                 membershipId;
+        
+        if( politicalParty.getPartyID() == null )
+            throw new EVException( "MembershipManager.save: Attempting to save a Membership with no Person or Club defined" );
+        //if( !voter.isPersistent() )
+           // throw new EVException( "MembershipManager.save: Attempting to save a Membership where either Person or Club are not persistent" );
+                              
+        try {
+            stmt = (PreparedStatement) conn.prepareStatement( insertMembershipSql );
+            
+            stmt.setString( 1, politicalParty.getPartyID() );
+            stmt.setString( 2, politicalParty.getPartyName() );
+            stmt.setString( 3, politicalParty.getColor() );
+            
+            inscnt = stmt.executeUpdate();
+            
+            if( inscnt >= 1 ) {
+                String sql = "select last_insert_id()";
+                if( stmt.execute( sql ) ) { // statement returned a result
 
+                    // retrieve the result
+                    ResultSet r = stmt.getResultSet();
+
+                    // we will use only the first row!
+                    //
+                    while( r.next() ) {
+
+                        // retrieve the last insert auto_increment value
+                        membershipId = r.getLong( 1 );
+                        if( membershipId > 0 )
+                        	politicalParty.setId( membershipId ); // set this membership's db id (proxy object)
+                    }
+                }
+            }
+            else
+                throw new EVException( "MembershipManager.save: failed to save a Membership" );
+        }
+        catch( SQLException e ) {
+            e.printStackTrace();
+            throw new EVException( "MembershipManager.save: failed to save a Membership: " + e );
+        }
 	}
 
 	@Override
@@ -1068,7 +1170,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
             stmt.setString( 2, voteRecord.getVoter().getFirstName() +
             		" " + voteRecord.getVoter().getLastName() );
             stmt.setLong( 3, voteRecord.getBallot().getId() );
-            stmt.setDate( 4, (Date) voteRecord.getDate() );
+            stmt.setDate( 4, (java.sql.Date) voteRecord.getDate() );
 
 
             
@@ -1134,7 +1236,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 		storeBallot(ballot);
 		for(int i=0; i<ballot.getBallotItems().size(); i++)
 		{
-			storeBallotItem(ballot.getBallotItems().get(i));
+			//storeBallot(ballot.getBallotItems().get(i));
 		}
 	}
 
@@ -1158,7 +1260,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         try {
             stmt = conn.createStatement();
 	if( stmt.execute( query.toString() ) ) {
-		    long ballotID;
+		    String ballotID;
 			String zip;
 			String EOName;
 			String name;
@@ -1169,7 +1271,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 
 		    // retrieve the retrieved clubs
 		    while( rs.next() ) {
-			ballotID = rs.getLong( 1 );
+			ballotID = rs.getString( 1 );
 			zip = rs.getString( 2 );
 			EOName = rs.getString( 3 );
 			name = rs.getString( 4 );
@@ -1180,7 +1282,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 			nextBallot.setBallotID(ballotID);
 			nextBallot.setZip(zip);
 			nextBallot.setEOName(EOName);
-			nextBallot.setName(name);
+			nextBallot.setBName(name);
 			nextBallot.setOpenDate(openDate);
 			nextBallot.setCloseDate(closeDate);
 
@@ -1194,7 +1296,6 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 
 	return nextBallot;
 		
-		return null;
 	}
 
 	@Override
@@ -1311,8 +1412,8 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 
                         // retrieve the last insert auto_increment value
                         membershipId = r.getLong( 1 );
-                        if( membershipId > 0 )
-                        	voteRecord.setId( membershipId ); // set this membership's db id (proxy object)
+                       // if( membershipId > 0 )
+                     //   	voteRecord.setId( membershipId ); // set this membership's db id (proxy object)
                     }
                 }
             }
@@ -1488,7 +1589,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         ElectoralDistrict nextElectoralDistrict = null;
 	
         condition.setLength( 0 );
-         query.append( selectPersonSql );
+         query.append( selectClubSql );
         if( ballot != null ) {
             if( ballot.getZip() != null ) // id is unique, so it is sufficient to get a person
                 query.append( " where zip = " + ballot.getZip() );
@@ -1542,7 +1643,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
         try {
             stmt = conn.createStatement();
 		if( stmt.execute( query.toString() ) ) {
-		    long ballotID;
+		    String ballotID;
 			String zip;
 			String EOName;
 			String name;
@@ -1554,7 +1655,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 
 		    // retrieve the retrieved clubs
 		    while( rs.next() ) {
-			ballotID = rs.getLong( 1 );
+			ballotID = rs.getString( 1 );
 			zip = rs.getString( 2 );
 			EOName = rs.getString( 3 );
 			name = rs.getString( 4 );
@@ -1565,7 +1666,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 			nextBallot.setBallotID(ballotID);
 			nextBallot.setZip(zip);
 			nextBallot.setEOName(EOName);
-			nextBallot.setName(name);
+			nextBallot.setBName(name);
 			nextBallot.setOpenDate(openDate);
 			nextBallot.setCloseDate(closeDate);
 
@@ -1796,8 +1897,8 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 
                         // retrieve the last insert auto_increment value
                         membershipId = r.getLong( 1 );
-                        if( membershipId > 0 )
-                        	voteRecord.setId( membershipId ); // set this membership's db id (proxy object)
+                        //if( membershipId > 0 )
+                       // 	voteRecord.setId( membershipId ); // set this membership's db id (proxy object)
                     }
                 }
             }
@@ -1852,7 +1953,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
             throw new EVException( "ClubManager.restore: Could not restore persistent Club objects; Root cause: " + e );
         }
         
-		return nextElectionDistrict;
+		return nextElectoralDistrict;
 	}
 
 	@Override
@@ -1912,7 +2013,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 		// TODO Auto-generated method stub
 		String               deleteVoterSql = "DELETE FROM voter WHERE voterName = ?";
 		String               deleteElectoralDistrictSql = "DELETE FROM electoralDistrict WHERE zip = ?";
-        PreparedStatement    stmt = null;
+		PreparedStatement    stmt = null;
         PreparedStatement    stmt2 = null;
         int                  inscnt, inscnt2;
              
@@ -1936,6 +2037,176 @@ public class PersistenceLayerImpl implements PersistenceLayer {
             e.printStackTrace();
             throw new EVException( "ClubManager.delete: failed to delete a Club: " + e );        }
 	}
+
+	@Override
+	public Ballot restoreBallotIncludesBallotItem(VoteRecord voteRecordImpl) throws EVException{
+		// TODO Auto-generated method stub
+		
+		String       sqlQuery = "SELECT ballotID, zip, EOName, bName, approved FROM ballot";
+        Statement    stmt = null;
+        StringBuffer query = new StringBuffer( 100 );
+        StringBuffer condition = new StringBuffer( 100 );
+    	Ballot nextBallot = null;
+
+        condition.setLength( 0 );
+         query.append( sqlQuery );
+        if( voteRecordImpl != null ) {
+            if( voteRecordImpl.getRecordID() != null ) // id is unique, so it is sufficient to get a person
+                query.append( " where  ballotID = " + voteRecordImpl.getRecordID() );
+           
+        }
+        
+        try {
+            stmt = conn.createStatement();
+	if( stmt.execute( query.toString() ) ) {
+		    String ballotID;
+			String zip;
+			String EOName;
+			String name;
+			Date openDate;
+			Date closeDate;
+
+			ResultSet rs = stmt.getResultSet();
+
+		    // retrieve the retrieved clubs
+		    while( rs.next() ) {
+			ballotID = rs.getString( 1 );
+			zip = rs.getString( 2 );
+			EOName = rs.getString( 3 );
+			name = rs.getString( 4 );
+			openDate = rs.getDate( 5 );
+			closeDate = rs.getDate( 6 );
+
+			nextBallot = objectLayer.createBallot();
+			nextBallot.setBallotID(ballotID);
+			nextBallot.setZip(zip);
+			nextBallot.setEOName(EOName);
+			nextBallot.setBName(name);
+			nextBallot.setOpenDate(openDate);
+			nextBallot.setCloseDate(closeDate);
+
+		    }
+		}
+        }
+        
+        catch( Exception e ) {      // just in case...
+            throw new EVException( "ClubManager.restore: Could not restore persistent Club objects; Root cause: " + e );
+        }
+
+	return nextBallot;
 	}
+	
+	public Ballot restoreBallotIncludesElection(ElectionImpl election) throws EVException{
+		// TODO Auto-generated method stub
+		
+		String       sqlQuery = "SELECT ballotID, zip, EOName, bName, approved FROM ballot";
+        Statement    stmt = null;
+        StringBuffer query = new StringBuffer( 100 );
+        StringBuffer condition = new StringBuffer( 100 );
+    	Ballot nextBallot = null;
+
+        condition.setLength( 0 );
+         query.append( sqlQuery );
+        if( election != null ) {
+            if( election.getItemID() != null ) // id is unique, so it is sufficient to get a person
+                query.append( " where  ballotID = " + election.getItemID() );
+           
+        }
+        
+        try {
+            stmt = conn.createStatement();
+	if( stmt.execute( query.toString() ) ) {
+		    String ballotID;
+			String zip;
+			String EOName;
+			String name;
+			Date openDate;
+			Date closeDate;
+
+			ResultSet rs = stmt.getResultSet();
+
+		    // retrieve the retrieved clubs
+		    while( rs.next() ) {
+			ballotID = rs.getString( 1 );
+			zip = rs.getString( 2 );
+			EOName = rs.getString( 3 );
+			name = rs.getString( 4 );
+			openDate = rs.getDate( 5 );
+			closeDate = rs.getDate( 6 );
+
+			nextBallot = objectLayer.createBallot();
+			nextBallot.setBallotID(ballotID);
+			nextBallot.setZip(zip);
+			nextBallot.setEOName(EOName);
+			nextBallot.setBName(name);
+			nextBallot.setOpenDate(openDate);
+			nextBallot.setCloseDate(closeDate);
+
+		    }
+		}
+        }
+        
+        catch( Exception e ) {      // just in case...
+            throw new EVException( "ClubManager.restore: Could not restore persistent Club objects; Root cause: " + e );
+        }
+
+	return nextBallot;
+	}
+
+	@Override
+	public void restoreBallotItemIncludesIssue(Issue issueImpl) throws EVException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void storeBallotItem(BallotItem ballotItem) throws EVException{
+		// TODO Auto-generated method stub
+		String               insertMembershipSql = "INSERT INTO ballotItem (itemID, ballotID, voteCount) VALUES ( ?, ?, ? )";              
+        PreparedStatement    stmt = null;
+        int                  inscnt;
+        long                 membershipId;
+        
+        if( ballotItem.getItemID() == null )
+            throw new EVException( "MembershipManager.save: Attempting to save a Membership with no Person or Club defined" );
+        //if( !voter.isPersistent() )
+           // throw new EVException( "MembershipManager.save: Attempting to save a Membership where either Person or Club are not persistent" );
+                              
+        try {
+            stmt = (PreparedStatement) conn.prepareStatement( insertMembershipSql );
+            
+            stmt.setString( 1, ballotItem.getItemID() );
+            stmt.setString( 2, ballotItem.getBallotID() );
+            stmt.setInt( 3, ballotItem.getVoteCount() );
+            
+            inscnt = stmt.executeUpdate();
+            
+            if( inscnt >= 1 ) {
+                String sql = "select last_insert_id()";
+                if( stmt.execute( sql ) ) { // statement returned a result
+
+                    // retrieve the result
+                    ResultSet r = stmt.getResultSet();
+
+                    // we will use only the first row!
+                    //
+                    while( r.next() ) {
+
+                        // retrieve the last insert auto_increment value
+                        membershipId = r.getLong( 1 );
+                        if( membershipId > 0 )
+                        	ballotItem.setId( membershipId ); // set this membership's db id (proxy object)
+                    }
+                }
+            }
+            else
+                throw new EVException( "MembershipManager.save: failed to save a Membership" );
+        }
+        catch( SQLException e ) {
+            e.printStackTrace();
+            throw new EVException( "MembershipManager.save: failed to save a Membership: " + e );
+        }
+	}
+
 
 }

@@ -1,10 +1,11 @@
- 
+package edu.uga.cs.evote.object.impl;
 
 import java.util.Date;
 import java.util.List;
 
 import edu.uga.cs.evote.EVException;
 import edu.uga.cs.evote.entity.Ballot;
+import edu.uga.cs.evote.entity.BallotItem;
 import edu.uga.cs.evote.entity.Candidate;
 import edu.uga.cs.evote.entity.Election;
 import edu.uga.cs.evote.entity.ElectionsOfficer;
@@ -13,6 +14,20 @@ import edu.uga.cs.evote.entity.Issue;
 import edu.uga.cs.evote.entity.PoliticalParty;
 import edu.uga.cs.evote.entity.VoteRecord;
 import edu.uga.cs.evote.entity.Voter;
+import edu.uga.cs.evote.entity.impl.BallotImpl;
+import edu.uga.cs.evote.entity.impl.BallotItemImpl;
+import edu.uga.cs.evote.entity.impl.CandidateImpl;
+import edu.uga.cs.evote.entity.impl.ElectionImpl;
+import edu.uga.cs.evote.entity.impl.ElectionsOfficerImpl;
+import edu.uga.cs.evote.entity.impl.ElectoralDistrictImpl;
+import edu.uga.cs.evote.entity.impl.IssueImpl;
+import edu.uga.cs.evote.entity.impl.PoliticalPartyImpl;
+import edu.uga.cs.evote.entity.impl.VoteRecordImpl;
+import edu.uga.cs.evote.entity.impl.VoterImpl;
+import edu.uga.cs.evote.object.ObjectLayer;
+import edu.uga.cs.evote.persistence.PersistenceLayer;
+import edu.uga.cs.evote.persistence.impl.PersistenceLayerImpl;
+import edu.uga.cs.evote.persistence.impl.Persistent;
 
 public class ObjectLayerImpl implements ObjectLayer
 {
@@ -41,10 +56,9 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new ElectionsOfficer object instance with the given attribute values
      * @throws EVException in case either firstName, lastName, or userName is null
      */
-    public ElectionsOfficer createElectionsOfficer( String firstName, String lastName, String userName, 
-                                                    String password, String emailAddress, String address ) throws EVException {
-        ElectionsOfficerImpl eo = new ElectionsOfficerImpl(firstName, lastName, userName, password, emailAddress, address);
-        eo.setPersistenceLayer(persistence);
+    public ElectionsOfficer createElectionsOfficer( String EOName, String userID) throws EVException {
+        ElectionsOfficerImpl eo = new ElectionsOfficerImpl(EOName, userID);
+        eo.setPersistencaLayer(persistence);
         return eo;
     }
 
@@ -53,9 +67,9 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new ElectionsOfficer object instance
      */
     public ElectionsOfficer createElectionsOfficer() {
-        ElectionsOfficerImpl eo = new ElectionsOfficerImpl(null, null, null, null, null, null);
+        ElectionsOfficerImpl eo = new ElectionsOfficerImpl(null, null);
         eo.setId(-1);
-        eo.setPersistenceLayer(persistence);
+        eo.setPersistencaLayer(persistence);
         return eo;
     }
     
@@ -99,10 +113,9 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new Voter object instance with the given attribute values
      * @throws EVException in case any of the String parameters is null or if age is not positive
      */
-    public Voter createVoter( String firstName, String lastName, String userName, String password, 
-            String emailAddress, String address, int age ) throws EVException {
-        VoterImpl voter = new VoterImpl(firstName, lastName, userName, password, emailAddress, address, age);
-        voter.setPersistenceLayer(persistence);
+    public Voter createVoter( String voterName, int age, String zip, String userID) throws EVException {
+        VoterImpl voter = new VoterImpl(voterName, age, zip, userID);
+        voter.setPersistencaLayer(persistence);
         return voter;
     }
 
@@ -111,9 +124,9 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new Voter object instance
      */
     public Voter createVoter() {
-        VoterImpl voter = new VoterImpl(null, null, null, null, null, null, -1);
+        VoterImpl voter = new VoterImpl(null, 0, null, null);
         voter.setId(-1);
-        voter.setPersistenceLayer(persistence);
+        voter.setPersistencaLayer(persistence);
         return voter;
     }
     
@@ -151,9 +164,9 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new PoliticalParty object instance with the given attribute values
      * @throws EVException in case name is null
      */
-    public PoliticalParty createPoliticalParty( String name ) throws EVException {
-        PoliticalPartyImpl politicalParty = new PoliticalPartyImpl(name);
-        persistence.setPoliticalParty(politicalParty);
+    public PoliticalParty createPoliticalParty( String partyID, String partyName, String color ) throws EVException {
+        PoliticalPartyImpl politicalParty = new PoliticalPartyImpl(partyID, partyName, color);
+        politicalParty.setPersistencaLayer(persistence);
         return politicalParty;
     }
 
@@ -162,9 +175,9 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new PoliticalParty object instance
      */
     public PoliticalParty createPoliticalParty() {
-        PoliticalPartyImpl politicalParty = new PoliticalPartyImpl(null);
+        PoliticalPartyImpl politicalParty = new PoliticalPartyImpl();
         politicalParty.setId(-1);
-        persistence.setPoliticalParty(politicalParty);
+        politicalParty.setPersistencaLayer(persistence);
         return politicalParty;
     }
 
@@ -202,9 +215,9 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new ElectoralDistrict object instance with the given attribute values
      * @throws EVException in case name is null
      */
-    public ElectoralDistrict createElectoralDistrict( String name ) throws EVException {
-        ElectoralDistrictImpl electoralDistrict = new ElectoralDistrictImpl(name);
-        persistence.setElectoralDistrict(electoralDistrict);
+    public ElectoralDistrict createElectoralDistrict( String zip, String districtName ) throws EVException {
+        ElectoralDistrictImpl electoralDistrict = new ElectoralDistrictImpl(zip, districtName);
+        electoralDistrict.setPersistencaLayer(persistence);
         return electoralDistrict;
     }
 
@@ -213,9 +226,9 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new ElectoralDistrict object instance
      */
     public ElectoralDistrict createElectoralDistrict() {
-        ElectoralDistrictImpl electoralDistrict = new ElectoralDistrictImpl(null);
+        ElectoralDistrictImpl electoralDistrict = new ElectoralDistrictImpl(null, null);
         electoralDistrict.setId(-1);
-        persistence.setElectoralDistrict(electoralDistrict);
+        electoralDistrict.setPersistencaLayer(persistence);
         return electoralDistrict;
     }
 
@@ -256,10 +269,10 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new Ballot object instance with the given attribute values
      * @throws EVException in case any of the arguments are null or if the electoralDistrict is not persistent
      */
-    public Ballot createBallot( Date openDate, Date closeDate, boolean approved, ElectoralDistrict electoralDistrict ) throws EVException {
-        BallotImpl ballot = new BallotImpl(openDate, closeDate, approved, electoralDistrict);
-        persistence.setBallot(ballot);
-        return ballot;
+    public Ballot createBallot(String ballotID, String zip, String EOName, String bName, String approved) throws EVException {
+        BallotImpl ballot = new BallotImpl(ballotID, zip, EOName, bName, approved);
+        ballot.setPersistencaLayer(persistence);
+		return ballot;
     }
 
     /**
@@ -267,9 +280,9 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new Ballot object instance
      */
     public Ballot createBallot() {
-        BallotImpl ballot = new BallotImpl(null, null, false, null);
+        BallotImpl ballot = new BallotImpl();
         ballot.setId(-1);
-        persistence.setBallot(ballot);
+        ballot.setPersistencaLayer(persistence);
         return ballot;
     }
 
@@ -309,9 +322,9 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new Candidate object instance with the given attribute values
      * @throws EVException in case either the name or the politicalParty are null
      */
-    public Candidate createCandidate( String name, PoliticalParty politicalParty, Election election ) throws EVException {
-        CandidateImpl candidate = new CandidateImpl(name, politicalParty, election);
-        persistence.setCandidate(candidate);
+    public Candidate createCandidate( String choiceID, String electionName, String partyID, String title, int voteCount, String description ) throws EVException {
+        CandidateImpl candidate = new CandidateImpl(choiceID, electionName, partyID, title, voteCount, description);
+        candidate.setPersistencaLayer(persistence);
         return candidate;
     }
 
@@ -320,9 +333,9 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new Candidate object instance
      */
     public CandidateImpl createCandidate() {
-        CandidateImpl candidate = new CandidateImpl(null, null, null);
+        CandidateImpl candidate = new CandidateImpl();
         candidate.setId(-1);
-        persistence.setCandidate(candidate);
+        candidate.setPersistencaLayer(persistence);
         return candidate;
     }
 
@@ -360,9 +373,9 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new Issue object instance with the given attribute value
      * @throws EVException in case question is null
      */
-    public Issue createIssue( String question ) throws EVException {
-        IssueImpl issue = new IssueImpl(question);
-        persistence.setIssue(issue);
+    public Issue createIssue( String issueID, String itemID, String questionTitle, String description, int yesCount, int noCount ) throws EVException {
+        IssueImpl issue = new IssueImpl(issueID, itemID, questionTitle, description, yesCount, noCount);
+        issue.setPersistencaLayer(persistence);
         return issue;
     }
 
@@ -371,9 +384,9 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new Issue object instance
      */
     public Issue createIssue() {
-        IssueImpl issue = new IssueImpl(null);
+        IssueImpl issue = new IssueImpl();
         issue.setId(-1);
-        persistence.setIssue(issue);
+        issue.setPersistencaLayer(persistence);
         return issue;
     }
 
@@ -412,9 +425,9 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new Election object instance with the given attribute value
      * @throws EVException in case question is null
      */
-    public Election createElection( String office, boolean isPartisan ) throws EVException {
-        ElectionImpl election = new ElectionImpl(office, isPartisan);
-        persistence.setElection(election);
+    public Election createElection(String electionName, String itemID, Long startDate, Long endDate, String isPartisan) throws EVException {
+        ElectionImpl election = new ElectionImpl(electionName, itemID, startDate, endDate, isPartisan);
+        election.setPersistencaLayer(persistence);
         return election;
     }
 
@@ -423,9 +436,9 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new Election object instance
      */
     public Election createElection() {
-        ElectionImpl election = new ElectionImpl(null, false);
+        ElectionImpl election = new ElectionImpl(null, null, null, null, null);
         election.setId(-1);
-        persistence.setElection(election);
+        election.setPersistencaLayer(persistence);
         return election;
     }
 
@@ -465,9 +478,9 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new VoteRecord object instance with the given attribute value
      * @throws EVException in case either of the arguments is null
      */
-    public VoteRecord createVoteRecord( Ballot ballot, Voter voter, Date date ) throws EVException {
-        VoteRecordImpl voteRecord = new VoteRecordImpl(ballot, voter, date);
-        persistence.setVoteRecord(voteRecord);
+    public VoteRecord createVoteRecord( String recordID, String voterName, String ballotID, Date date) throws EVException {
+        VoteRecordImpl voteRecord = new VoteRecordImpl(recordID, voterName, ballotID, date);
+        voteRecord.setPersistencaLayer(persistence);
         return voteRecord;
     }
 
@@ -476,9 +489,9 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new VoteRecord object instance
      */
     public VoteRecord createVoteRecord() {
-        VoteRecordImpl voteRecord = new VoteRecordImpl(null, null, null);
-        voteRecord.setId(-1);
-        persistence.setVoteRecord(voteRecord);
+        VoteRecordImpl voteRecord = new VoteRecordImpl(null, null, null, null);
+        voteRecord.setId( -1 );
+        voteRecord.setPersistencaLayer(persistence);
         return voteRecord;
     }
 
@@ -509,4 +522,38 @@ public class ObjectLayerImpl implements ObjectLayer
     public void deleteVoteRecord( VoteRecord voteRecord ) throws EVException {
         persistence.deleteVoteRecord(voteRecord);
     }
+
+
+	@Override
+	public VoteRecord createVoteRecord(Ballot ballot, Voter voter, Date date) throws EVException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public void setPersistence( PersistenceLayer persistence )
+    {
+        this.persistence = persistence;        
+    }
+
+	@Override
+	public ElectoralDistrict createElectoralDistrict(String name) throws EVException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BallotItem createBallotItem(String itemID, String ballotID, int voteCount) throws EVException {
+		// TODO Auto-generated method stub
+		BallotItemImpl ballotI = new BallotItemImpl(itemID, ballotID, voteCount);
+		ballotI.setId(-1);
+		ballotI.setPersistencaLayer(persistence);
+        return ballotI;
+	}
+
+	@Override
+	public void storeBallotItem(BallotItem ballotItem) throws EVException {
+		// TODO Auto-generated method stub
+        persistence.storeBallotItem(ballotItem);
+
+	}
 }

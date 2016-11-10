@@ -11,22 +11,22 @@ public interface Election
     /** Return the office for which this election is held.
      * @return the office of this election
      */
-    public String getOffice();
+    //public String getOffice();
     
     /** Set the new office for which this election is held.
      * @param office the new office for this election
      */
-    public void setOffice( String office );
+   // public void setOffice( String office );
     
     /** Return true if this is a partisan election and false otherwise.
      * @return partisan status of this election
      */
-    public boolean getIsPartisan();
+    public String getIsPartisan();
     
     /** Set the new partisan status of this election.
      * @param isPartisan the new partisan status
      */
-    public void setIsPartisan( boolean isPartisan );
+    public void setIsPartisan( String isPartisan );
     
     /** Return a list of the candidates for this election.
      * @return the list of the candidates
@@ -50,15 +50,22 @@ public interface Election
 	
 	public void setElectionName( String electionName );
 	
-//	public String getItemID();
-//	
-//	public void setItemID( String itemID );
+	public String getItemID();
 	
-	public Date getStartDate();
+	public void setItemID( String itemID );
+	
+	public Long getStartDate();
 
-	public void setStartDate( java.util.Date startDate );
+	public void setStartDate( Long startDate );
 	
-	public Date getEndDate();
+	public Long getEndDate();
 	
-	public void setEndDate( Date date );
+	public void setEndDate( Long date );
+
+	public void setStartDate(java.util.Date startDate);
+
+	public void setEndDate(java.util.Date endDate);
+
+	public void setIsPartisan(Boolean isPartisan);
+	
 }

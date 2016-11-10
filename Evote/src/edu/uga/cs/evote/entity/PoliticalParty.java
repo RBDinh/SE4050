@@ -31,4 +31,8 @@ public interface PoliticalParty
      * @throws EVException in case there is a problem with traversing links to the requested objects
      */
     public List<Candidate> getCandidates() throws EVException;
+
+	public void setPartyName(String partyName);
+
+	public String getPartyName();
 }

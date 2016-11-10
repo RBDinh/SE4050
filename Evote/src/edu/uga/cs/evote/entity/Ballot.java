@@ -41,12 +41,12 @@ public interface Ballot extends Persistable
 	/** Return the name for this Ballot
      * @return the name for this Ballot
      */
-    public String getName();
+    public String getBName();
     
     /** Set the new Name for this Ballot
      * @param Name the new ballot officer
      */
-    public void setName( String Name );
+    public void setBName( String Name );
 	
     /** Return the opening date for this Ballot
      * @return the opening date for this Ballot
@@ -103,6 +103,13 @@ public interface Ballot extends Persistable
      * @throws EVException in case there is a problem with traversing links to the requested objects
      */
     public List<VoteRecord> getVoterVoteRecords() throws EVException;
+
+	public String getbName();
+
+	public String getApproved();
+
+
+
 
 
 }

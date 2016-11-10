@@ -10,40 +10,31 @@ extends Persistent
 implements Issue {
 
 	//attributes
+	String issueID;
 	String itemID;
 	String description;
-	int voteCount;
-	Ballot ballot;
-	String question;
+	String questionTitle;
 	int yesCount, noCount;
+	Ballot ballot = null;
+	BallotImpl ballotItem = null;
 	
 	//constructors
 	public IssueImpl()
 	{
 		itemID = null;
 		description = null;
-		voteCount = -1;
-		ballot = null;
-		question = null;
+		questionTitle = null;
 		yesCount = -1;
 		noCount = -1;
 	}
 	
 	//constructors
-	public IssueImpl(
-			String itemID,
-			String description,
-			int voteCount,
-			Ballot ballot,
-			String question,
-			int yesCount,
-			int noCount)
+	public IssueImpl(String issueID, String itemID, String questionTitle, String description, int yesCount, int noCount)
 	{
+		this.issueID = issueID;
 		this.itemID = itemID;
 		this.description = description;
-		this.voteCount = voteCount;
-		this.ballot = ballot;
-		this.question = question;
+		this.questionTitle = questionTitle;
 		this.yesCount = yesCount;
 		this.noCount = noCount;
 	}
@@ -66,38 +57,13 @@ implements Issue {
 	}
 	
 	@Override
-	public int getVoteCount() {
-		return voteCount;
-	}
-
-	@Override
-	public void setVoteCount(int voteCount) throws EVException {
-		this.voteCount = voteCount;
-	}
-
-	@Override
-	public void addVote() {
-		voteCount++;
-	}
-
-	@Override
-	public Ballot getBallot() throws EVException {
-		return ballot;
-	}
-
-	@Override
-	public void setBallot(Ballot ballot) throws EVException {
-		this.ballot = ballot;
-	}
-
-	@Override
 	public String getQuestion() {
-		return question;
+		return questionTitle;
 	}
 
 	@Override
-	public void setQuestion(String question) {
-		this.question = question;
+	public void setQuestion(String questionTitle) {
+		this.questionTitle = questionTitle;
 	}
 
 	@Override
@@ -118,13 +84,70 @@ implements Issue {
 	@Override
 	public void addYesVote() {
 		yesCount++;
-		voteCount++;
 	}
 
 	@Override
 	public void addNoVote() {
 		noCount++;
-		voteCount++;
+	}
+
+	@Override
+	public String getBallotID() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getVoteCount() {
+		return yesCount + noCount;
+	}
+
+	@Override
+	public void setVoteCount(int voteCount) throws EVException {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void addVote() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public Ballot getBallot() throws EVException {
+		// TODO Auto-generated method stub
+		ballotItem.getPersistencaLayer().restoreBallotItemIncludesIssue(this);
+		
+		return ballot;
+	}
+
+	@Override
+	public void setBallot(Ballot ballot) throws EVException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setBallotID(String ballotID) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getIssueID() {
+		// TODO Auto-generated method stub
+		return issueID;
+	}
+
+	@Override
+	public void setIssueID(String issueID) {
+		// TODO Auto-generated method stub
+		this.issueID = issueID;
+	}
+
+	@Override
+	public void setNoCount(int noCount) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

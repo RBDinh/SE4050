@@ -13,20 +13,26 @@ extends Persistent
 implements Voter {
 	
 	//attributes
+
+	String voterName;
+	int age;
+	String zip;
+	String userID;
+	
 	String firstName;
 	String lastName;
-	String userID;
 	String password;
 	String emailAddress;
 	String address;
 	String voterID;
-	int age;
 	ElectoralDistrict electoralDistrict;
 	List<VoteRecord> voteRecord;
 	
 	//constructor
 	public VoterImpl()
 	{
+		zip = null;
+		voterName = null;
 		firstName = null;
 		lastName = null;
 		userID = null;
@@ -34,32 +40,42 @@ implements Voter {
 		emailAddress = null;
 		address = null;
 		voterID = null;
-		age = -1;
+		age = 0;
 		electoralDistrict = null;
 		voteRecord = null;
 	}
 	
-	public VoterImpl(
-			String firstName,
-			String lastName,
-			String userID,
-			String password,
-			String emailAddress,
-			String address,
-			String voterID,
-			int age,
-			ElectoralDistrict electoralDistrict,
-			List<VoteRecord> voteRecord)
+	public VoterImpl(String voterName, int age, String zip, String userID)
+			
 	{
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.userID = userID;
-		this.password = password;
-		this.emailAddress = emailAddress;
-		this.address = address;
-		this.voterID = voterID;
+		this.voterName = voterName;
 		this.age = age;
-		this.electoralDistrict = electoralDistrict;
+		this.zip = zip;
+		this.userID = userID;
+		
+	}
+
+	public String getVoterName() {
+		return voterName;
+	}
+
+	public void setVoterName(String voterName) {
+		this.voterName = voterName;
+	}
+
+	public String getVoterID() {
+		return voterID;
+	}
+
+	public void setVoterID(String voterID) {
+		this.voterID = voterID;
+	}
+
+	public List<VoteRecord> getVoteRecord() {
+		return voteRecord;
+	}
+
+	public void setVoteRecord(List<VoteRecord> voteRecord) {
 		this.voteRecord = voteRecord;
 	}
 
@@ -166,6 +182,18 @@ implements Voter {
 	public void setUserName(String userName) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void setZip(String zip) {
+		// TODO Auto-generated method stub
+		this.zip = zip;
+	}
+
+	@Override
+	public String getZip() {
+		// TODO Auto-generated method stub
+		return zip;
 	}
 
 }

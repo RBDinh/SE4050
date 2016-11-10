@@ -15,39 +15,46 @@ implements Election {
 
 	//attributes
 	String electionName;
-	Date startDate, endDate;
-	int voteCount;
+	String itemID;
+	Long startDate, endDate;
 	Ballot ballot;
-	String office;
-	Boolean isPartisan;
+	String isPartisan;
+	List<Candidate> candidates = null;
+	Candidate candidate = null;
 	
 	//constructors
 	public ElectionImpl()
 	{
 		super(-1);
 		electionName = null;
-//		itemID = null;
-		voteCount = -1;
+		itemID = null;
+		startDate = null;
+		endDate = null;
 		ballot = null;
-		office = null;
 		isPartisan = null;
 	}
 	
 	//constructors
-	public ElectionImpl(String electionName, String itemID,
-			int voteCount, Ballot ballot, String office, boolean isPartisan, List<Candidate> candidates)
+	public ElectionImpl(String electionName, String itemID, Long startDate, Long endDate, String isPartisan)
 	{
 		super(-1);
-		this.voteCount = voteCount;
-//		this.itemID = itemID;
-		this.ballot = ballot;
-		this.office = office;
+		this.electionName = electionName;
+		this.itemID = itemID;
+		this.startDate = startDate;
+		this.endDate = endDate;
 		this.isPartisan = isPartisan;
-		this.candidates = candidates;
 	}
 	
 	//methods
 	
+	public String getItemID() {
+		return itemID;
+	}
+
+	public void setItemID(String itemID) {
+		this.itemID = itemID;
+	}
+
 	public String getElectionName() {
 		return electionName;
 	}
@@ -56,43 +63,31 @@ implements Election {
 		this.electionName = electionName;
 	}
 	
-//	public String getItemID() {
-//		return itemID;
-//	}
-//	
-//	public void setItemID( String itemID ) {
-//		this.itemID = itemID;
-//	}
-	
-	public Date getStartDate() {
+	public Long getStartDate() {
 		return startDate;
 	}
 	
-	public void setStartDate( Date date ) {
+	public void setStartDate( Long date ) {
 		this.startDate = date;
 	}
 	
-	public Date getEndDate() {
+	public Long getEndDate() {
 		return endDate;
 	}
 	
-	public void setEndDate( Date date ) {
+	public void setEndDate( Long date ) {
 		this.endDate = date;
 	}
 	
-	@Override
-	public int getVoteCount() {
-		return voteCount;
-	}
-
+	
 	@Override
 	public void setVoteCount(int voteCount) throws EVException {
-		this.voteCount = voteCount;
+		
 	}
 	
 	@Override
 	public void addVote() {
-		voteCount++;
+		
 	}
 
 	@Override
@@ -105,39 +100,79 @@ implements Election {
 		this.ballot = ballot;
 	}
 
-	@Override
-	public String getOffice() {
-		return office;
-	}
+
+
+
 
 	@Override
-	public void setOffice(String office) {
-		this.office = office;
-	}
-
-	@Override
-	public boolean getIsPartisan() {
+	public String getIsPartisan() {
 		return isPartisan;
 	}
 
 	@Override
-	public void setIsPartisan(boolean isPartisan) {
+	public void setIsPartisan(String isPartisan) {
 		this.isPartisan = isPartisan;
 	}
 
 	@Override
 	public List<Candidate> getCandidates() throws EVException {
+            if( isPersistent() ) {
+            	candidates = getPersistencaLayer().restoreCandidateIsCandidateInElection( this );
+            }
 		return candidates;
 	}
 
 	@Override
 	public void addCandidate(Candidate candidate) throws EVException {
-		this.candidates.add(candidate);
+		if( candidate  == null ){
+			if( isPersistent() ) {
+				getPersistencaLayer().storeCandidateIsCandidateInElection(candidate, this);
+			}
+		}
 	}
 
 	@Override
 	public void deleteCandidate(Candidate candidate) throws EVException {
-		this.candidates.remove(candidate);
+		if( candidate  == null ){
+			getPersistencaLayer().deleteCandidateIsCandidateInElection(candidate, this);
+		}
 	}
 
+	@Override
+	public int getVoteCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public String getBallotID() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setBallotID(String ballotID) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setStartDate(java.util.Date startDate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setEndDate(java.util.Date endDate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setIsPartisan(Boolean isPartisan) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 }

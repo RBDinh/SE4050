@@ -6,4 +6,13 @@ package edu.uga.cs.evote.entity;
 public interface ElectionsOfficer 
     extends User
 {
+
+	public String getEOName();
+
+	public void setEOName(String eOName);
+
+	public void setUserID(String userID);
+
+	public String getUserID();
+
 }

@@ -48,5 +48,17 @@ public interface Voter
      * @throws EVException in case there is a problem with traversing links to the requested objects
      */
     public List<VoteRecord> getBallotVoteRecords() throws EVException;
+
+	public String getVoterName();
+
+	public void setVoterName(String voterName);
+
+	public void setZip(String zip);
+
+	public void setUserID(String userID);
+
+	public String getUserID();
+
+	public String getZip();
     
 }

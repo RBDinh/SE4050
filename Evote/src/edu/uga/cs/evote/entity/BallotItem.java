@@ -36,4 +36,10 @@ public interface BallotItem
     public void setBallot( Ballot ballot ) throws EVException;
 
 	public String getBallotID();
+
+	public void setItemID(String itemID);
+
+	public void setBallotID(String ballotID);
+
+	public String getItemID();
 }
