@@ -160,6 +160,8 @@ public class WriteTest {
         catch( Exception e ) {
             e.printStackTrace();
         }
+        
+        System.out.println("All inputs added!");
 
 	}
 

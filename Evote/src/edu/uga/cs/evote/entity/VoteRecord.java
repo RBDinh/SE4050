@@ -14,12 +14,12 @@ public interface VoteRecord extends Persistable
     /** Return the date the vote has been cast.
      * @return the date of the cast vote
      */
-    public Date getDate();
+    public long getDate();
     
     /** Set the date the vote has been cast.
      * @param date the new date of the cast vote
      */
-    public void setDate( Date date );
+    public void setDate( long date );
     
     /** Return the Voter who cast the vote.
      * @return the voter who cast the vote
@@ -47,6 +47,10 @@ public interface VoteRecord extends Persistable
 
 	public void setVoterID(String voterID);
 
-	public void setBallotID(String ballotID); 
+	public void setBallotID(String ballotID);
+
+	public String getBallotID();
+
+	public String getVoterName(); 
 
 }

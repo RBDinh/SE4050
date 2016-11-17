@@ -1119,7 +1119,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 		    String recordID;
 		    String voterID;
 		    String ballotID;
-		    Date date;
+		    long date;
 		    VoteRecord nextVoteRecord = null;
 
 		    ResultSet rs = stmt.getResultSet();
@@ -1129,7 +1129,7 @@ public class PersistenceLayerImpl implements PersistenceLayer {
 			recordID = rs.getString(1);
 			voterID = rs.getString(2);
 			ballotID = rs.getString(3);
-			date = rs.getDate(4);
+			date = rs.getLong(4);
 
 			nextVoteRecord.setRecordID(recordID);
 			nextVoteRecord.setVoterID(voterID);
@@ -1167,10 +1167,9 @@ public class PersistenceLayerImpl implements PersistenceLayer {
             stmt = (PreparedStatement) conn.prepareStatement( insertMembershipSql );
             
             stmt.setString( 1, voteRecord.getRecordID() );
-            stmt.setString( 2, voteRecord.getVoter().getFirstName() +
-            		" " + voteRecord.getVoter().getLastName() );
-            stmt.setLong( 3, voteRecord.getBallot().getId() );
-            stmt.setDate( 4, (java.sql.Date) voteRecord.getDate() );
+            stmt.setString( 2, voteRecord.getVoterName() );
+            stmt.setString( 3, voteRecord.getBallotID() );
+            stmt.setLong( 4, voteRecord.getDate() );
 
 
             

@@ -478,7 +478,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new VoteRecord object instance with the given attribute value
      * @throws EVException in case either of the arguments is null
      */
-    public VoteRecord createVoteRecord( String recordID, String voterName, String ballotID, Date date) throws EVException {
+    public VoteRecord createVoteRecord( String recordID, String voterName, String ballotID, Long date) throws EVException {
         VoteRecordImpl voteRecord = new VoteRecordImpl(recordID, voterName, ballotID, date);
         voteRecord.setPersistencaLayer(persistence);
         return voteRecord;
@@ -489,7 +489,7 @@ public class ObjectLayerImpl implements ObjectLayer
      * @return a new VoteRecord object instance
      */
     public VoteRecord createVoteRecord() {
-        VoteRecordImpl voteRecord = new VoteRecordImpl(null, null, null, null);
+        VoteRecordImpl voteRecord = new VoteRecordImpl(null, null, null, 0);
         voteRecord.setId( -1 );
         voteRecord.setPersistencaLayer(persistence);
         return voteRecord;

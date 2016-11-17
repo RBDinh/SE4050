@@ -1,7 +1,5 @@
 package edu.uga.cs.evote.entity.impl;
 
-import java.util.Date;
-
 import edu.uga.cs.evote.EVException;
 import edu.uga.cs.evote.entity.Ballot;
 import edu.uga.cs.evote.entity.VoteRecord;
@@ -16,7 +14,7 @@ implements VoteRecord {
 	String recordID;
 	String voterName;
 	String ballotID;
-	Date date;
+	long date;
 	Voter voter;
 	Ballot ballot;
 	
@@ -27,7 +25,7 @@ implements VoteRecord {
 		recordID = null;
 		voterName = null;
 		ballotID = null;
-		date = null;
+		date = 0;
 		voter = null;
 		ballot = null;
 	}
@@ -36,7 +34,7 @@ implements VoteRecord {
 			String recordID,
 			String voterName,
 			String ballotID,
-			Date date
+			long date
 			)
 	{
 		this.recordID = recordID;
@@ -72,12 +70,12 @@ implements VoteRecord {
 	}
 	
 	@Override
-	public Date getDate() {
+	public long getDate() {
 		return date;
 	}
 
 	@Override
-	public void setDate(Date date) {
+	public void setDate(long date) {
 		this.date = date;
 	}
 
