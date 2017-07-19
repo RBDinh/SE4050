@@ -10,36 +10,45 @@ implements User {
 	//attributes
 	String firstName;
 	String lastName;
-	String userName;
+	String userID;
 	String password;
-	String emailAddress;
+	String email;
 	String address;
+	String county;
+	String state;
 	
 	//constructors
 	public UserImpl()
 	{
 		firstName = null;
 		lastName = null;
-		userName = null;
+		userID = null;
 		password = null;
-		emailAddress = null;
+		email = null;
 		address = null;
+		county = null;
+		state = null;
 	}
 	
 	public UserImpl(
+			String userID,
+			String password,
 			String firstName,
 			String lastName,
-			String userName,
-			String password,
-			String emailAddress,
-			String address)
+			String address,
+			String state,
+			String county,
+			String email)
 	{
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.userName = userName;
+		this.userID = userID;
 		this.password = password;
-		this.emailAddress = emailAddress;
+		this.email = email;
 		this.address = address;
+		this.county = county;
+		this.email = email;
+		this.state = state;
 	}
 
 	
@@ -66,12 +75,12 @@ implements User {
 
 	@Override
 	public String getUserName() {
-		return userName;
+		return userID;
 	}
 
 	@Override
 	public void setUserName(String userName) {
-		this.userName = userName;
+		this.userID = userName;
 	}
 
 	@Override
@@ -85,13 +94,13 @@ implements User {
 	}
 
 	@Override
-	public String getEmailAddress() {
-		return emailAddress;
+	public String getEmail() {
+		return email;
 	}
 
 	@Override
-	public void setEmailAddress(String emailAddress) {
-		this.emailAddress = emailAddress;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	@Override
@@ -102,6 +111,22 @@ implements User {
 	@Override
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	
+	public String getState() {
+		return state;
+	}
+	
+	public void setState( String state) {
+		this.state = state;
+	}
+	
+	public String getCounty() {
+		return county;
+	}
+	
+	public void setCounty (String county) {
+		this.county = county;
 	}
 
 }

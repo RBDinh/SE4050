@@ -111,31 +111,26 @@ public class CandidateImpl extends Persistent implements Candidate {
 
 	@Override
 	public void setElectionName(String electionName) {
-		// TODO Auto-generated method stub
-		
+		this.electionName = electionName;
 	}
 
 	@Override
 	public void setpartyID(String partyID) {
-		// TODO Auto-generated method stub
-		
+		this.partyID = partyID;
 	}
 
 	@Override
 	public void setTitle(String title) {
-		// TODO Auto-generated method stub
-		
+		this.title = title;
 	}
 
 	@Override
 	public String getElectionName() {
-		// TODO Auto-generated method stub
 		return electionName;
 	}
 
 	@Override
 	public String getPartyID() {
-		// TODO Auto-generated method stub
 		return partyID;
 	}
 

@@ -8,7 +8,13 @@ extends Persistent
 implements ElectionsOfficer {
 
 	//attributes
-	
+	//attributes
+	private String firstName;
+	private String lastName;
+	private String userName;
+	private String password;
+	private String emailAddress;
+	private String address;
 	private String EOName;
 	private String userID;
 	
@@ -42,80 +48,8 @@ implements ElectionsOfficer {
 		this.userID = userID;
 	}
 
-	@Override
-	public String getFirstName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setFirstName(String firstName) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String getLastName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setLastName(String lastName) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String getUserName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setUserName(String userName) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setPassword(String password) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String getEmailAddress() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setEmailAddress(String emailAddress) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String getAddress() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setAddress(String address) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	//methods
-	/*@Override
+	@Override
 	public String getFirstName() {
 		return firstName;
 	}
@@ -135,14 +69,14 @@ implements ElectionsOfficer {
 		this.lastName = lastName;
 	}
 
-	@Override
+
 	public String getUserName() {
-		return userName;
+		return userID;
 	}
 
-	@Override
-	public void setUserName(String userName) {
-		this.userName = userName;
+
+	public void setUserName(String userID) {
+		this.userID = userID;
 	}
 
 	@Override
@@ -155,12 +89,10 @@ implements ElectionsOfficer {
 		this.password = password;
 	}
 
-	@Override
 	public String getEmailAddress() {
 		return emailAddress;
 	}
 
-	@Override
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
@@ -173,5 +105,41 @@ implements ElectionsOfficer {
 	@Override
 	public void setAddress(String address) {
 		this.address = address;
-	}*/
+	}
+
+	@Override
+	public String getEmail() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setEmail(String email) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getState() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setState(String state) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getCounty() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setCounty(String county) {
+		// TODO Auto-generated method stub
+		
+	}
 }

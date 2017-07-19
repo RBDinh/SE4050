@@ -54,11 +54,6 @@ implements Ballot {
 	}
 
 	//methods
-	@Override
-	public boolean isPersistent() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	@Override
 	public String getBallotID() {

@@ -77,4 +77,6 @@ public interface Candidate extends Persistable
 	public String getElectionName();
 
 	public String getPartyID();
+
+	public String getTitle();
 }

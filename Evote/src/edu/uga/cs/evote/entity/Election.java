@@ -54,17 +54,14 @@ public interface Election
 	
 	public void setItemID( String itemID );
 	
-	public Long getStartDate();
+	public Date getStartDate();
 
-	public void setStartDate( Long startDate );
+	public void setStartDate( Date startDate );
 	
-	public Long getEndDate();
+	public Date getEndDate();
 	
-	public void setEndDate( Long date );
+	public void setEndDate( Date date );
 
-	public void setStartDate(java.util.Date startDate);
-
-	public void setEndDate(java.util.Date endDate);
 
 	public void setIsPartisan(Boolean isPartisan);
 	

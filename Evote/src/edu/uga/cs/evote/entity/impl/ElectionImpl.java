@@ -16,7 +16,7 @@ implements Election {
 	//attributes
 	String electionName;
 	String itemID;
-	Long startDate, endDate;
+	Date startDate, endDate;
 	Ballot ballot;
 	String isPartisan;
 	List<Candidate> candidates = null;
@@ -35,7 +35,7 @@ implements Election {
 	}
 	
 	//constructors
-	public ElectionImpl(String electionName, String itemID, Long startDate, Long endDate, String isPartisan)
+	public ElectionImpl(String electionName, String itemID, Date startDate, Date endDate, String isPartisan)
 	{
 		super(-1);
 		this.electionName = electionName;
@@ -63,19 +63,20 @@ implements Election {
 		this.electionName = electionName;
 	}
 	
-	public Long getStartDate() {
+	public Date getStartDate() {
 		return startDate;
 	}
 	
-	public void setStartDate( Long date ) {
+	@Override
+	public void setStartDate( Date date ) {
 		this.startDate = date;
 	}
 	
-	public Long getEndDate() {
+	public Date getEndDate() {
 		return endDate;
 	}
 	
-	public void setEndDate( Long date ) {
+	public void setEndDate( Date date ) {
 		this.endDate = date;
 	}
 	
@@ -152,18 +153,6 @@ implements Election {
 
 	@Override
 	public void setBallotID(String ballotID) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setStartDate(java.util.Date startDate) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setEndDate(java.util.Date endDate) {
 		// TODO Auto-generated method stub
 		
 	}

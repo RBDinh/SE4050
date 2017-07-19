@@ -27,6 +27,7 @@ implements Voter {
 	String voterID;
 	ElectoralDistrict electoralDistrict;
 	List<VoteRecord> voteRecord;
+	private String county;
 	
 	//constructor
 	public VoterImpl()
@@ -118,12 +119,12 @@ implements Voter {
 	}
 
 	@Override
-	public String getEmailAddress() {
+	public String getEmail() {
 		return emailAddress;
 	}
 
 	@Override
-	public void setEmailAddress(String emailAddress) {
+	public void setEmail(String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
 
@@ -194,6 +195,29 @@ implements Voter {
 	public String getZip() {
 		// TODO Auto-generated method stub
 		return zip;
+	}
+
+	@Override
+	public String getState() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setState(String state) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getCounty() {
+		// TODO Auto-generated method stub
+		return county;
+	}
+
+	@Override
+	public void setCounty(String county) {
+		this.county = county;
 	}
 
 }

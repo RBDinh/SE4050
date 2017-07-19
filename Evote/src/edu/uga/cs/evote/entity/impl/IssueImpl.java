@@ -127,12 +127,6 @@ implements Issue {
 	}
 
 	@Override
-	public void setBallotID(String ballotID) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public String getIssueID() {
 		// TODO Auto-generated method stub
 		return issueID;
@@ -146,7 +140,11 @@ implements Issue {
 
 	@Override
 	public void setNoCount(int noCount) {
-		// TODO Auto-generated method stub
+		this.noCount = noCount;
+	}
+
+	@Override
+	public void setBallotID(String ballotID) {
 		
 	}
 

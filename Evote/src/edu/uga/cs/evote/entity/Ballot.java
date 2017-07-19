@@ -108,6 +108,8 @@ public interface Ballot extends Persistable
 
 	public String getApproved();
 
+	public void setApproved(String approved);
+
 
 
 
